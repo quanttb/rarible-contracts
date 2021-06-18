@@ -6,10 +6,9 @@ pragma experimental ABIEncoderV2;
  * @dev Math operations with safety checks that throw on error
  */
 library SafeMath {
-
     /**
-    * @dev Multiplies two numbers, throws on overflow.
-    */
+     * @dev Multiplies two numbers, throws on overflow.
+     */
     function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
         // Gas optimization: this is cheaper than asserting 'a' not being zero, but the
         // benefit is lost if 'b' is also tested.
@@ -24,8 +23,8 @@ library SafeMath {
     }
 
     /**
-    * @dev Integer division of two numbers, truncating the quotient.
-    */
+     * @dev Integer division of two numbers, truncating the quotient.
+     */
     function div(uint256 a, uint256 b) internal pure returns (uint256) {
         // assert(b > 0); // Solidity automatically throws when dividing by 0
         // uint256 c = a / b;
@@ -34,16 +33,16 @@ library SafeMath {
     }
 
     /**
-    * @dev Subtracts two numbers, throws on overflow (i.e. if subtrahend is greater than minuend).
-    */
+     * @dev Subtracts two numbers, throws on overflow (i.e. if subtrahend is greater than minuend).
+     */
     function sub(uint256 a, uint256 b) internal pure returns (uint256) {
         assert(b <= a);
         return a - b;
     }
 
     /**
-    * @dev Adds two numbers, throws on overflow.
-    */
+     * @dev Adds two numbers, throws on overflow.
+     */
     function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
         c = a + b;
         assert(c >= a);
@@ -55,9 +54,8 @@ library SafeMath {
     Note: Simple contract to use as base for const vals
 */
 contract CommonConstants {
-
-    bytes4 constant internal ERC1155_ACCEPTED = 0xf23a6e61; // bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))
-    bytes4 constant internal ERC1155_BATCH_ACCEPTED = 0xbc197c81; // bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))
+    bytes4 internal constant ERC1155_ACCEPTED = 0xf23a6e61; // bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))
+    bytes4 internal constant ERC1155_BATCH_ACCEPTED = 0xbc197c81; // bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))
 }
 
 /**
@@ -77,7 +75,13 @@ interface ERC1155TokenReceiver {
         @param _data      Additional data with no specified format
         @return           `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
     */
-    function onERC1155Received(address _operator, address _from, uint256 _id, uint256 _value, bytes calldata _data) external returns(bytes4);
+    function onERC1155Received(
+        address _operator,
+        address _from,
+        uint256 _id,
+        uint256 _value,
+        bytes calldata _data
+    ) external returns (bytes4);
 
     /**
         @notice Handle the receipt of multiple ERC1155 token types.
@@ -92,7 +96,13 @@ interface ERC1155TokenReceiver {
         @param _data      Additional data with no specified format
         @return           `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))`
     */
-    function onERC1155BatchReceived(address _operator, address _from, uint256[] calldata _ids, uint256[] calldata _values, bytes calldata _data) external returns(bytes4);
+    function onERC1155BatchReceived(
+        address _operator,
+        address _from,
+        uint256[] calldata _ids,
+        uint256[] calldata _values,
+        bytes calldata _data
+    ) external returns (bytes4);
 }
 
 /**
@@ -132,7 +142,13 @@ contract IERC1155 is IERC165 {
         When minting/creating tokens, the `_from` argument MUST be set to `0x0` (i.e. zero address).
         When burning/destroying tokens, the `_to` argument MUST be set to `0x0` (i.e. zero address).
     */
-    event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, uint256 _id, uint256 _value);
+    event TransferSingle(
+        address indexed _operator,
+        address indexed _from,
+        address indexed _to,
+        uint256 _id,
+        uint256 _value
+    );
 
     /**
         @dev Either `TransferSingle` or `TransferBatch` MUST emit when tokens are transferred, including zero value transfers as well as minting or burning (see "Safe Transfer Rules" section of the standard).
@@ -144,12 +160,22 @@ contract IERC1155 is IERC165 {
         When minting/creating tokens, the `_from` argument MUST be set to `0x0` (i.e. zero address).
         When burning/destroying tokens, the `_to` argument MUST be set to `0x0` (i.e. zero address).
     */
-    event TransferBatch(address indexed _operator, address indexed _from, address indexed _to, uint256[] _ids, uint256[] _values);
+    event TransferBatch(
+        address indexed _operator,
+        address indexed _from,
+        address indexed _to,
+        uint256[] _ids,
+        uint256[] _values
+    );
 
     /**
         @dev MUST emit when approval for a second party/operator address to manage all tokens for an owner address is enabled or disabled (absense of an event assumes disabled).
     */
-    event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved);
+    event ApprovalForAll(
+        address indexed _owner,
+        address indexed _operator,
+        bool _approved
+    );
 
     /**
         @dev MUST emit when the URI is updated for a token ID.
@@ -172,7 +198,13 @@ contract IERC1155 is IERC165 {
         @param _value   Transfer amount
         @param _data    Additional data with no specified format, MUST be sent unaltered in call to `onERC1155Received` on `_to`
     */
-    function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes calldata _data) external;
+    function safeTransferFrom(
+        address _from,
+        address _to,
+        uint256 _id,
+        uint256 _value,
+        bytes calldata _data
+    ) external;
 
     /**
         @notice Transfers `_values` amount(s) of `_ids` from the `_from` address to the `_to` address specified (with safety call).
@@ -190,7 +222,13 @@ contract IERC1155 is IERC165 {
         @param _values  Transfer amounts per token type (order and length must match _ids array)
         @param _data    Additional data with no specified format, MUST be sent unaltered in call to the `ERC1155TokenReceiver` hook(s) on `_to`
     */
-    function safeBatchTransferFrom(address _from, address _to, uint256[] calldata _ids, uint256[] calldata _values, bytes calldata _data) external;
+    function safeBatchTransferFrom(
+        address _from,
+        address _to,
+        uint256[] calldata _ids,
+        uint256[] calldata _values,
+        bytes calldata _data
+    ) external;
 
     /**
         @notice Get the balance of an account's Tokens.
@@ -198,7 +236,10 @@ contract IERC1155 is IERC165 {
         @param _id     ID of the Token
         @return        The _owner's balance of the Token type requested
      */
-    function balanceOf(address _owner, uint256 _id) external view returns (uint256);
+    function balanceOf(address _owner, uint256 _id)
+        external
+        view
+        returns (uint256);
 
     /**
         @notice Get the balance of multiple account/token pairs
@@ -206,7 +247,10 @@ contract IERC1155 is IERC165 {
         @param _ids    ID of the Tokens
         @return        The _owner's balance of the Token types requested (i.e. balance for each (owner, id) pair)
      */
-    function balanceOfBatch(address[] calldata _owners, uint256[] calldata _ids) external view returns (uint256[] memory);
+    function balanceOfBatch(address[] calldata _owners, uint256[] calldata _ids)
+        external
+        view
+        returns (uint256[] memory);
 
     /**
         @notice Enable or disable approval for a third party ("operator") to manage all of the caller's tokens.
@@ -222,7 +266,10 @@ contract IERC1155 is IERC165 {
         @param _operator  Address of authorized operator
         @return           True if the operator is approved, false if not
     */
-    function isApprovedForAll(address _owner, address _operator) external view returns (bool);
+    function isApprovedForAll(address _owner, address _operator)
+        external
+        view
+        returns (bool);
 }
 
 /**
@@ -242,7 +289,7 @@ contract ERC165 is IERC165 {
      */
     mapping(bytes4 => bool) private _supportedInterfaces;
 
-    constructor () internal {
+    constructor() internal {
         // Derived contracts need only register support for their own interfaces,
         // we register support for ERC165 itself here
         _registerInterface(_INTERFACE_ID_ERC165);
@@ -253,7 +300,11 @@ contract ERC165 is IERC165 {
      *
      * Time complexity O(1), guaranteed to always use less than 30 000 gas.
      */
-    function supportsInterface(bytes4 interfaceId) external view returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        external
+        view
+        returns (bool)
+    {
         return _supportedInterfaces[interfaceId];
     }
 
@@ -286,7 +337,7 @@ library Address {
      * It is unsafe to assume that an address for which this function returns
      * false is an externally-owned account (EOA) and not a contract.
      *
-     * Among others, `isContract` will return false for the following 
+     * Among others, `isContract` will return false for the following
      * types of addresses:
      *
      *  - an externally-owned account
@@ -300,9 +351,12 @@ library Address {
         // and 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470 is returned
         // for accounts without code, i.e. `keccak256('')`
         bytes32 codehash;
-        bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
+        bytes32 accountHash =
+            0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
         // solhint-disable-next-line no-inline-assembly
-        assembly { codehash := extcodehash(account) }
+        assembly {
+            codehash := extcodehash(account)
+        }
         return (codehash != accountHash && codehash != 0x0);
     }
 
@@ -312,7 +366,11 @@ library Address {
      *
      * _Available since v2.4.0._
      */
-    function toPayable(address account) internal pure returns (address payable) {
+    function toPayable(address account)
+        internal
+        pure
+        returns (address payable)
+    {
         return address(uint160(account));
     }
 
@@ -335,27 +393,32 @@ library Address {
      * _Available since v2.4.0._
      */
     function sendValue(address payable recipient, uint256 amount) internal {
-        require(address(this).balance >= amount, "Address: insufficient balance");
+        require(
+            address(this).balance >= amount,
+            "Address: insufficient balance"
+        );
 
         // solhint-disable-next-line avoid-call-value
         (bool success, ) = recipient.call.value(amount)("");
-        require(success, "Address: unable to send value, recipient may have reverted");
+        require(
+            success,
+            "Address: unable to send value, recipient may have reverted"
+        );
     }
 }
 
 // A sample implementation of core ERC1155 function.
-contract ERC1155 is IERC1155, ERC165, CommonConstants
-{
+contract ERC1155 is IERC1155, ERC165, CommonConstants {
     using SafeMath for uint256;
     using Address for address;
 
     // id => (owner => balance)
-    mapping (uint256 => mapping(address => uint256)) internal balances;
+    mapping(uint256 => mapping(address => uint256)) internal balances;
 
     // owner => (operator => approved)
-    mapping (address => mapping(address => bool)) internal operatorApproval;
+    mapping(address => mapping(address => bool)) internal operatorApproval;
 
-/////////////////////////////////////////// ERC165 //////////////////////////////////////////////
+    /////////////////////////////////////////// ERC165 //////////////////////////////////////////////
 
     /*
         bytes4(keccak256("safeTransferFrom(address,address,uint256,uint256,bytes)")) ^
@@ -365,15 +428,15 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
         bytes4(keccak256("setApprovalForAll(address,bool)")) ^
         bytes4(keccak256("isApprovedForAll(address,address)"));
     */
-    bytes4 constant private INTERFACE_SIGNATURE_ERC1155 = 0xd9b67a26;
+    bytes4 private constant INTERFACE_SIGNATURE_ERC1155 = 0xd9b67a26;
 
-/////////////////////////////////////////// CONSTRUCTOR //////////////////////////////////////////
+    /////////////////////////////////////////// CONSTRUCTOR //////////////////////////////////////////
 
     constructor() public {
         _registerInterface(INTERFACE_SIGNATURE_ERC1155);
     }
 
-/////////////////////////////////////////// ERC1155 //////////////////////////////////////////////
+    /////////////////////////////////////////// ERC1155 //////////////////////////////////////////////
 
     /**
         @notice Transfers `_value` amount of an `_id` from the `_from` address to the `_to` address specified (with safety call).
@@ -389,15 +452,23 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
         @param _value   Transfer amount
         @param _data    Additional data with no specified format, MUST be sent unaltered in call to `onERC1155Received` on `_to`
     */
-    function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes calldata _data) external {
-
+    function safeTransferFrom(
+        address _from,
+        address _to,
+        uint256 _id,
+        uint256 _value,
+        bytes calldata _data
+    ) external {
         require(_to != address(0x0), "_to must be non-zero.");
-        require(_from == msg.sender || operatorApproval[_from][msg.sender] == true, "Need operator approval for 3rd party transfers.");
+        require(
+            _from == msg.sender || operatorApproval[_from][msg.sender] == true,
+            "Need operator approval for 3rd party transfers."
+        );
 
         // SafeMath will throw with insuficient funds _from
         // or if _id is not valid (balance will be 0)
         balances[_id][_from] = balances[_id][_from].sub(_value);
-        balances[_id][_to]   = _value.add(balances[_id][_to]);
+        balances[_id][_to] = _value.add(balances[_id][_to]);
 
         // MUST emit event
         emit TransferSingle(msg.sender, _from, _to, _id, _value);
@@ -405,7 +476,14 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
         // Now that the balance is updated and the event was emitted,
         // call onERC1155Received if the destination is a contract.
         if (_to.isContract()) {
-            _doSafeTransferAcceptanceCheck(msg.sender, _from, _to, _id, _value, _data);
+            _doSafeTransferAcceptanceCheck(
+                msg.sender,
+                _from,
+                _to,
+                _id,
+                _value,
+                _data
+            );
         }
     }
 
@@ -425,12 +503,23 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
         @param _values  Transfer amounts per token type (order and length must match _ids array)
         @param _data    Additional data with no specified format, MUST be sent unaltered in call to the `ERC1155TokenReceiver` hook(s) on `_to`
     */
-    function safeBatchTransferFrom(address _from, address _to, uint256[] calldata _ids, uint256[] calldata _values, bytes calldata _data) external {
-
+    function safeBatchTransferFrom(
+        address _from,
+        address _to,
+        uint256[] calldata _ids,
+        uint256[] calldata _values,
+        bytes calldata _data
+    ) external {
         // MUST Throw on errors
         require(_to != address(0x0), "destination address must be non-zero.");
-        require(_ids.length == _values.length, "_ids and _values array lenght must match.");
-        require(_from == msg.sender || operatorApproval[_from][msg.sender] == true, "Need operator approval for 3rd party transfers.");
+        require(
+            _ids.length == _values.length,
+            "_ids and _values array lenght must match."
+        );
+        require(
+            _from == msg.sender || operatorApproval[_from][msg.sender] == true,
+            "Need operator approval for 3rd party transfers."
+        );
 
         for (uint256 i = 0; i < _ids.length; ++i) {
             uint256 id = _ids[i];
@@ -439,7 +528,7 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
             // SafeMath will throw with insuficient funds _from
             // or if _id is not valid (balance will be 0)
             balances[id][_from] = balances[id][_from].sub(value);
-            balances[id][_to]   = value.add(balances[id][_to]);
+            balances[id][_to] = value.add(balances[id][_to]);
         }
 
         // Note: instead of the below batch versions of event and acceptance check you MAY have emitted a TransferSingle
@@ -453,7 +542,14 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
         // Now that the balances are updated and the events are emitted,
         // call onERC1155BatchReceived if the destination is a contract.
         if (_to.isContract()) {
-            _doSafeBatchTransferAcceptanceCheck(msg.sender, _from, _to, _ids, _values, _data);
+            _doSafeBatchTransferAcceptanceCheck(
+                msg.sender,
+                _from,
+                _to,
+                _ids,
+                _values,
+                _data
+            );
         }
     }
 
@@ -463,13 +559,16 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
         @param _id     ID of the Token
         @return        The _owner's balance of the Token type requested
      */
-    function balanceOf(address _owner, uint256 _id) external view returns (uint256) {
+    function balanceOf(address _owner, uint256 _id)
+        external
+        view
+        returns (uint256)
+    {
         // The balance of any account can be calculated from the Transfer events history.
         // However, since we need to keep the balances to validate transfer request,
         // there is no extra cost to also privide a querry function.
         return balances[_id][_owner];
     }
-
 
     /**
         @notice Get the balance of multiple account/token pairs
@@ -477,8 +576,11 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
         @param _ids    ID of the Tokens
         @return        The _owner's balance of the Token types requested (i.e. balance for each (owner, id) pair)
      */
-    function balanceOfBatch(address[] calldata _owners, uint256[] calldata _ids) external view returns (uint256[] memory) {
-
+    function balanceOfBatch(address[] calldata _owners, uint256[] calldata _ids)
+        external
+        view
+        returns (uint256[] memory)
+    {
         require(_owners.length == _ids.length);
 
         uint256[] memory balances_ = new uint256[](_owners.length);
@@ -507,31 +609,64 @@ contract ERC1155 is IERC1155, ERC165, CommonConstants
         @param _operator  Address of authorized operator
         @return           True if the operator is approved, false if not
     */
-    function isApprovedForAll(address _owner, address _operator) external view returns (bool) {
+    function isApprovedForAll(address _owner, address _operator)
+        external
+        view
+        returns (bool)
+    {
         return operatorApproval[_owner][_operator];
     }
 
-/////////////////////////////////////////// Internal //////////////////////////////////////////////
+    /////////////////////////////////////////// Internal //////////////////////////////////////////////
 
-    function _doSafeTransferAcceptanceCheck(address _operator, address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) internal {
-
+    function _doSafeTransferAcceptanceCheck(
+        address _operator,
+        address _from,
+        address _to,
+        uint256 _id,
+        uint256 _value,
+        bytes memory _data
+    ) internal {
         // If this was a hybrid standards solution you would have to check ERC165(_to).supportsInterface(0x4e2312e0) here but as this is a pure implementation of an ERC-1155 token set as recommended by
         // the standard, it is not necessary. The below should revert in all failure cases i.e. _to isn't a receiver, or it is and either returns an unknown value or it reverts in the call to indicate non-acceptance.
 
-
         // Note: if the below reverts in the onERC1155Received function of the _to address you will have an undefined revert reason returned rather than the one in the require test.
         // If you want predictable revert reasons consider using low level _to.call() style instead so the revert does not bubble up and you can revert yourself on the ERC1155_ACCEPTED test.
-        require(ERC1155TokenReceiver(_to).onERC1155Received(_operator, _from, _id, _value, _data) == ERC1155_ACCEPTED, "contract returned an unknown value from onERC1155Received");
+        require(
+            ERC1155TokenReceiver(_to).onERC1155Received(
+                _operator,
+                _from,
+                _id,
+                _value,
+                _data
+            ) == ERC1155_ACCEPTED,
+            "contract returned an unknown value from onERC1155Received"
+        );
     }
 
-    function _doSafeBatchTransferAcceptanceCheck(address _operator, address _from, address _to, uint256[] memory _ids, uint256[] memory _values, bytes memory _data) internal {
-
+    function _doSafeBatchTransferAcceptanceCheck(
+        address _operator,
+        address _from,
+        address _to,
+        uint256[] memory _ids,
+        uint256[] memory _values,
+        bytes memory _data
+    ) internal {
         // If this was a hybrid standards solution you would have to check ERC165(_to).supportsInterface(0x4e2312e0) here but as this is a pure implementation of an ERC-1155 token set as recommended by
         // the standard, it is not necessary. The below should revert in all failure cases i.e. _to isn't a receiver, or it is and either returns an unknown value or it reverts in the call to indicate non-acceptance.
 
         // Note: if the below reverts in the onERC1155BatchReceived function of the _to address you will have an undefined revert reason returned rather than the one in the require test.
         // If you want predictable revert reasons consider using low level _to.call() style instead so the revert does not bubble up and you can revert yourself on the ERC1155_BATCH_ACCEPTED test.
-        require(ERC1155TokenReceiver(_to).onERC1155BatchReceived(_operator, _from, _ids, _values, _data) == ERC1155_BATCH_ACCEPTED, "contract returned an unknown value from onERC1155BatchReceived");
+        require(
+            ERC1155TokenReceiver(_to).onERC1155BatchReceived(
+                _operator,
+                _from,
+                _ids,
+                _values,
+                _data
+            ) == ERC1155_BATCH_ACCEPTED,
+            "contract returned an unknown value from onERC1155BatchReceived"
+        );
     }
 }
 
@@ -540,16 +675,16 @@ library UintLibrary {
         if (_i == 0) {
             return "0";
         }
-        uint j = _i;
-        uint len;
+        uint256 j = _i;
+        uint256 len;
         while (j != 0) {
             len++;
             j /= 10;
         }
         bytes memory bstr = new bytes(len);
-        uint k = len - 1;
+        uint256 k = len - 1;
         while (_i != 0) {
-            bstr[k--] = byte(uint8(48 + _i % 10));
+            bstr[k--] = byte(uint8(48 + (_i % 10)));
             _i /= 10;
         }
         return string(bstr);
@@ -559,55 +694,88 @@ library UintLibrary {
 library StringLibrary {
     using UintLibrary for uint256;
 
-    function append(string memory _a, string memory _b) internal pure returns (string memory) {
+    function append(string memory _a, string memory _b)
+        internal
+        pure
+        returns (string memory)
+    {
         bytes memory _ba = bytes(_a);
         bytes memory _bb = bytes(_b);
         bytes memory bab = new bytes(_ba.length + _bb.length);
-        uint k = 0;
-        for (uint i = 0; i < _ba.length; i++) bab[k++] = _ba[i];
-        for (uint i = 0; i < _bb.length; i++) bab[k++] = _bb[i];
+        uint256 k = 0;
+        for (uint256 i = 0; i < _ba.length; i++) bab[k++] = _ba[i];
+        for (uint256 i = 0; i < _bb.length; i++) bab[k++] = _bb[i];
         return string(bab);
     }
 
-    function append(string memory _a, string memory _b, string memory _c) internal pure returns (string memory) {
+    function append(
+        string memory _a,
+        string memory _b,
+        string memory _c
+    ) internal pure returns (string memory) {
         bytes memory _ba = bytes(_a);
         bytes memory _bb = bytes(_b);
         bytes memory _bc = bytes(_c);
         bytes memory bbb = new bytes(_ba.length + _bb.length + _bc.length);
-        uint k = 0;
-        for (uint i = 0; i < _ba.length; i++) bbb[k++] = _ba[i];
-        for (uint i = 0; i < _bb.length; i++) bbb[k++] = _bb[i];
-        for (uint i = 0; i < _bc.length; i++) bbb[k++] = _bc[i];
+        uint256 k = 0;
+        for (uint256 i = 0; i < _ba.length; i++) bbb[k++] = _ba[i];
+        for (uint256 i = 0; i < _bb.length; i++) bbb[k++] = _bb[i];
+        for (uint256 i = 0; i < _bc.length; i++) bbb[k++] = _bc[i];
         return string(bbb);
     }
 
-    function recover(string memory message, uint8 v, bytes32 r, bytes32 s) internal pure returns (address) {
+    function recover(
+        string memory message,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) internal pure returns (address) {
         bytes memory msgBytes = bytes(message);
-        bytes memory fullMessage = concat(
-            bytes("\x19Ethereum Signed Message:\n"),
-            bytes(msgBytes.length.toString()),
-            msgBytes,
-            new bytes(0), new bytes(0), new bytes(0), new bytes(0)
-        );
+        bytes memory fullMessage =
+            concat(
+                bytes("\x19Ethereum Signed Message:\n"),
+                bytes(msgBytes.length.toString()),
+                msgBytes,
+                new bytes(0),
+                new bytes(0),
+                new bytes(0),
+                new bytes(0)
+            );
         return ecrecover(keccak256(fullMessage), v, r, s);
     }
 
-    function concat(bytes memory _ba, bytes memory _bb, bytes memory _bc, bytes memory _bd, bytes memory _be, bytes memory _bf, bytes memory _bg) internal pure returns (bytes memory) {
-        bytes memory resultBytes = new bytes(_ba.length + _bb.length + _bc.length + _bd.length + _be.length + _bf.length + _bg.length);
-        uint k = 0;
-        for (uint i = 0; i < _ba.length; i++) resultBytes[k++] = _ba[i];
-        for (uint i = 0; i < _bb.length; i++) resultBytes[k++] = _bb[i];
-        for (uint i = 0; i < _bc.length; i++) resultBytes[k++] = _bc[i];
-        for (uint i = 0; i < _bd.length; i++) resultBytes[k++] = _bd[i];
-        for (uint i = 0; i < _be.length; i++) resultBytes[k++] = _be[i];
-        for (uint i = 0; i < _bf.length; i++) resultBytes[k++] = _bf[i];
-        for (uint i = 0; i < _bg.length; i++) resultBytes[k++] = _bg[i];
+    function concat(
+        bytes memory _ba,
+        bytes memory _bb,
+        bytes memory _bc,
+        bytes memory _bd,
+        bytes memory _be,
+        bytes memory _bf,
+        bytes memory _bg
+    ) internal pure returns (bytes memory) {
+        bytes memory resultBytes =
+            new bytes(
+                _ba.length +
+                    _bb.length +
+                    _bc.length +
+                    _bd.length +
+                    _be.length +
+                    _bf.length +
+                    _bg.length
+            );
+        uint256 k = 0;
+        for (uint256 i = 0; i < _ba.length; i++) resultBytes[k++] = _ba[i];
+        for (uint256 i = 0; i < _bb.length; i++) resultBytes[k++] = _bb[i];
+        for (uint256 i = 0; i < _bc.length; i++) resultBytes[k++] = _bc[i];
+        for (uint256 i = 0; i < _bd.length; i++) resultBytes[k++] = _bd[i];
+        for (uint256 i = 0; i < _be.length; i++) resultBytes[k++] = _be[i];
+        for (uint256 i = 0; i < _bf.length; i++) resultBytes[k++] = _bf[i];
+        for (uint256 i = 0; i < _bg.length; i++) resultBytes[k++] = _bg[i];
         return resultBytes;
     }
 }
 
 contract HasContractURI is ERC165 {
-
     string public contractURI;
 
     /*
@@ -689,7 +857,8 @@ contract HasTokenURI {
 contract Context {
     // Empty internal constructor, to prevent people from mistakenly deploying
     // an instance of this contract, which should be used via inheritance.
-    constructor () internal { }
+    constructor() internal {}
+
     // solhint-disable-previous-line no-empty-blocks
 
     function _msgSender() internal view returns (address payable) {
@@ -714,12 +883,15 @@ contract Context {
 contract Ownable is Context {
     address private _owner;
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
 
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor () internal {
+    constructor() internal {
         address msgSender = _msgSender();
         _owner = msgSender;
         emit OwnershipTransferred(address(0), msgSender);
@@ -771,7 +943,10 @@ contract Ownable is Context {
      * @dev Transfers ownership of the contract to a new account (`newOwner`).
      */
     function _transferOwnership(address newOwner) internal {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        require(
+            newOwner != address(0),
+            "Ownable: new owner is the zero address"
+        );
         emit OwnershipTransferred(_owner, newOwner);
         _owner = newOwner;
     }
@@ -794,10 +969,10 @@ interface IERC1155Metadata_URI {
     Note: The ERC-165 identifier for this interface is 0x0e89341c.
 */
 contract ERC1155Metadata_URI is IERC1155Metadata_URI, HasTokenURI {
-
-    constructor(string memory _tokenURIPrefix) HasTokenURI(_tokenURIPrefix) public {
-
-    }
+    constructor(string memory _tokenURIPrefix)
+        public
+        HasTokenURI(_tokenURIPrefix)
+    {}
 
     function uri(uint256 _id) external view returns (string memory) {
         return _tokenURI(_id);
@@ -805,8 +980,11 @@ contract ERC1155Metadata_URI is IERC1155Metadata_URI, HasTokenURI {
 }
 
 contract HasSecondarySaleFees is ERC165 {
-
-    event SecondarySaleFees(uint256 tokenId, address[] recipients, uint[] bps);
+    event SecondarySaleFees(
+        uint256 tokenId,
+        address[] recipients,
+        uint256[] bps
+    );
 
     /*
      * bytes4(keccak256('getFeeBps(uint256)')) == 0x0ebd4c7f
@@ -820,55 +998,78 @@ contract HasSecondarySaleFees is ERC165 {
         _registerInterface(_INTERFACE_ID_FEES);
     }
 
-    function getFeeRecipients(uint256 id) public view returns (address payable[] memory);
-    function getFeeBps(uint256 id) public view returns (uint[] memory);
+    function getFeeRecipients(uint256 id)
+        public
+        view
+        returns (address payable[] memory);
+
+    function getFeeBps(uint256 id) public view returns (uint256[] memory);
 }
 
-contract ERC1155Base is HasSecondarySaleFees, Ownable, ERC1155Metadata_URI, HasContractURI, ERC1155 {
-
+contract ERC1155Base is
+    HasSecondarySaleFees,
+    Ownable,
+    ERC1155Metadata_URI,
+    HasContractURI,
+    ERC1155
+{
     struct Fee {
         address payable recipient;
         uint256 value;
     }
 
     // id => creator
-    mapping (uint256 => address) public creators;
+    mapping(uint256 => address) public creators;
     // id => fees
-    mapping (uint256 => Fee[]) public fees;
+    mapping(uint256 => Fee[]) public fees;
 
-    constructor(string memory contractURI, string memory tokenURIPrefix) HasContractURI(contractURI) ERC1155Metadata_URI(tokenURIPrefix) public {
+    constructor(string memory contractURI, string memory tokenURIPrefix)
+        public
+        HasContractURI(contractURI)
+        ERC1155Metadata_URI(tokenURIPrefix)
+    {}
 
-    }
-
-    function getFeeRecipients(uint256 id) public view returns (address payable[] memory) {
+    function getFeeRecipients(uint256 id)
+        public
+        view
+        returns (address payable[] memory)
+    {
         Fee[] memory _fees = fees[id];
         address payable[] memory result = new address payable[](_fees.length);
-        for (uint i = 0; i < _fees.length; i++) {
+        for (uint256 i = 0; i < _fees.length; i++) {
             result[i] = _fees[i].recipient;
         }
         return result;
     }
 
-    function getFeeBps(uint256 id) public view returns (uint[] memory) {
+    function getFeeBps(uint256 id) public view returns (uint256[] memory) {
         Fee[] memory _fees = fees[id];
-        uint[] memory result = new uint[](_fees.length);
-        for (uint i = 0; i < _fees.length; i++) {
+        uint256[] memory result = new uint256[](_fees.length);
+        for (uint256 i = 0; i < _fees.length; i++) {
             result[i] = _fees[i].value;
         }
         return result;
     }
 
     // Creates a new token type and assings _initialSupply to minter
-    function _mint(uint256 _id, Fee[] memory _fees, uint256 _supply, string memory _uri) internal {
+    function _mint(
+        uint256 _id,
+        Fee[] memory _fees,
+        uint256 _supply,
+        string memory _uri
+    ) internal {
         require(creators[_id] == address(0x0), "Token is already minted");
         require(_supply != 0, "Supply should be positive");
         require(bytes(_uri).length > 0, "uri should be set");
 
         creators[_id] = msg.sender;
         address[] memory recipients = new address[](_fees.length);
-        uint[] memory bps = new uint[](_fees.length);
-        for (uint i = 0; i < _fees.length; i++) {
-            require(_fees[i].recipient != address(0x0), "Recipient should be present");
+        uint256[] memory bps = new uint256[](_fees.length);
+        for (uint256 i = 0; i < _fees.length; i++) {
+            require(
+                _fees[i].recipient != address(0x0),
+                "Recipient should be present"
+            );
             require(_fees[i].value != 0, "Fee value should be positive");
             fees[_id].push(_fees[i]);
             recipients[i] = _fees[i].recipient;
@@ -885,9 +1086,16 @@ contract ERC1155Base is HasSecondarySaleFees, Ownable, ERC1155Metadata_URI, HasC
         emit URI(_uri, _id);
     }
 
-    function burn(address _owner, uint256 _id, uint256 _value) external {
-
-        require(_owner == msg.sender || operatorApproval[_owner][msg.sender] == true, "Need operator approval for 3rd party burns.");
+    function burn(
+        address _owner,
+        uint256 _id,
+        uint256 _value
+    ) external {
+        require(
+            _owner == msg.sender ||
+                operatorApproval[_owner][msg.sender] == true,
+            "Need operator approval for 3rd party burns."
+        );
 
         // SafeMath will throw with insuficient funds _owner
         // or if _id is not valid (balance will be 0)
@@ -904,7 +1112,10 @@ contract ERC1155Base is HasSecondarySaleFees, Ownable, ERC1155Metadata_URI, HasC
      * @param uri string URI to assign
      */
     function _setTokenURI(uint256 tokenId, string memory uri) internal {
-        require(creators[tokenId] != address(0x0), "_setTokenURI: Token should exist");
+        require(
+            creators[tokenId] != address(0x0),
+            "_setTokenURI: Token should exist"
+        );
         super._setTokenURI(tokenId, uri);
     }
 
@@ -923,7 +1134,7 @@ contract ERC1155Base is HasSecondarySaleFees, Ownable, ERC1155Metadata_URI, HasC
  */
 library Roles {
     struct Role {
-        mapping (address => bool) bearer;
+        mapping(address => bool) bearer;
     }
 
     /**
@@ -946,7 +1157,11 @@ library Roles {
      * @dev Check if an account has this role.
      * @return bool
      */
-    function has(Role storage role, address account) internal view returns (bool) {
+    function has(Role storage role, address account)
+        internal
+        view
+        returns (bool)
+    {
         require(account != address(0), "Roles: account is the zero address");
         return role.bearer[account];
     }
@@ -960,12 +1175,15 @@ contract SignerRole is Context {
 
     Roles.Role private _signers;
 
-    constructor () internal {
+    constructor() internal {
         _addSigner(_msgSender());
     }
 
     modifier onlySigner() {
-        require(isSigner(_msgSender()), "SignerRole: caller does not have the Signer role");
+        require(
+            isSigner(_msgSender()),
+            "SignerRole: caller does not have the Signer role"
+        );
         _;
     }
 
@@ -992,22 +1210,22 @@ contract SignerRole is Context {
     }
 }
 
-
-
-
-
-
-
 contract RaribleToken is Ownable, SignerRole, ERC1155Base {
     string public name;
     string public symbol;
 
-    constructor(string memory _name, string memory _symbol, address signer, string memory contractURI, string memory tokenURIPrefix) ERC1155Base(contractURI, tokenURIPrefix) public {
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        address signer,
+        string memory contractURI,
+        string memory tokenURIPrefix
+    ) public ERC1155Base(contractURI, tokenURIPrefix) {
         name = _name;
         symbol = _symbol;
 
         _addSigner(signer);
-        _registerInterface(bytes4(keccak256('MINT_WITH_ADDRESS')));
+        _registerInterface(bytes4(keccak256("MINT_WITH_ADDRESS")));
     }
 
     function addSigner(address account) public onlyOwner {
@@ -1018,8 +1236,19 @@ contract RaribleToken is Ownable, SignerRole, ERC1155Base {
         _removeSigner(account);
     }
 
-    function mint(uint256 id, uint8 v, bytes32 r, bytes32 s, Fee[] memory fees, uint256 supply, string memory uri) public {
-        require(isSigner(ecrecover(keccak256(abi.encodePacked(this, id)), v, r, s)), "signer should sign tokenId");
+    function mint(
+        uint256 id,
+        uint8 v,
+        bytes32 r,
+        bytes32 s,
+        Fee[] memory fees,
+        uint256 supply,
+        string memory uri
+    ) public {
+        require(
+            isSigner(ecrecover(keccak256(abi.encodePacked(this, id)), v, r, s)),
+            "signer should sign tokenId"
+        );
         _mint(id, fees, supply, uri);
     }
 }
