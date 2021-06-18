@@ -1,0 +1,28 @@
+{
+  "name": "truffle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "truffle compile",
+    "test": "truffle test",
+    "test:dev": "truffle test --show-events",
+    "start:dev": "ganache-cli --account_keys_path ./accounts.json",
+    "migrate:dev": "truffle migrate",
+    "console:dev": "truffle console",
+    "migrate:bsc": "truffle migrate --network bsc_testnet",
+    "console:bsc": "truffle console --network bsc_testnet",
+    "migrate:localhost": "truffle migrate --network localhost",
+    "console:localhost": "truffle console --network localhost"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.4.0",
+    "ethereumjs-util": "^7.0.10",
+    "fs": "^0.0.1-security",
+    "ganache-cli": "^6.12.2",
+    "truffle": "^5.3.10"
+  }
+}
