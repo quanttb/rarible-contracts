@@ -23,6 +23,19 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true,
     },
+    ropsten: {
+      provider: () =>
+        new HDWalletProvider(
+          privateKeys,
+          `https://ropsten.infura.io/v3/3ddd56890b904b69b8f3a6febe318e7d`,
+          0,
+          1
+        ),
+      network_id: 3,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+    },
     localhost: {
       provider: () =>
         new HDWalletProvider(privateKeys, `http://127.0.0.1:8545`, 0, 1),
@@ -33,12 +46,10 @@ module.exports = {
     },
   },
 
-  // Set default mocha options here, use special reporters etc.
   mocha: {
-    // timeout: 100000
+    timeout: 10000
   },
 
-  // Configure your compilers
   compilers: {
     solc: {
       version: '0.5.17',
