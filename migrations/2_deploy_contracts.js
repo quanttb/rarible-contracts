@@ -13,13 +13,15 @@ const ExchangeOrdersHolderV1 = artifacts.require('ExchangeOrdersHolderV1');
 const ExchangeV1 = artifacts.require('ExchangeV1');
 
 module.exports = async function (deployer) {
-  const NAME = 'NFTtify';
-  const SYMBOL = 'NFTtify';
-  const SIGNER_ADDRESS = '0x996c256e426cb7884fc6fa76722a2f7b3fef88cd';
+  const NAME = 'Tokenplay Token';
+  const SYMBOL = 'TOP';
+  const SIGNER_ADDRESS = '0xd6e323D7215EA5349A7B83CA3c4B415993fEF960';
   const BENEFICIARY_ADDRESS = '0x9c3D7e0B53024147ef7966247d6BB61E60aCb200';
-  const BUYER_FEE_SIGNER_ADDRESS = '0xa76992f88e28f33c2a0cd53d1622976357dfdb8b';
-  const CONTRACT_URI = 'https://api-mainnet.rarible.com/contractMetadata/{address}';
-  const TOKEN_URI_PREFIX = 'ipfs:/';
+  const BUYER_FEE_SIGNER_ADDRESS = '0xd6e323D7215EA5349A7B83CA3c4B415993fEF960';
+  const CONTRACT_URI = '';
+  const TOKEN_URI_PREFIX = '';
+  // const CONTRACT_URI = 'https://api-mainnet.rarible.com/contractMetadata/{address}';
+  // const TOKEN_URI_PREFIX = 'ipfs:/';
 
   await deployer.deploy(
     MintableToken,
@@ -30,67 +32,67 @@ module.exports = async function (deployer) {
     TOKEN_URI_PREFIX
   );
 
-  // await deployer.deploy(
-  //   RaribleToken,
-  //   NAME,
-  //   SYMBOL,
-  //   SIGNER_ADDRESS,
-  //   CONTRACT_URI,
-  //   TOKEN_URI_PREFIX
-  // );
+  await deployer.deploy(
+    RaribleToken,
+    NAME,
+    SYMBOL,
+    SIGNER_ADDRESS,
+    CONTRACT_URI,
+    TOKEN_URI_PREFIX
+  );
 
-  // await deployer.deploy(WETH);
-  // await deployer.deploy(TransferProxy);
-  // await deployer.deploy(TransferProxyForDeprecated);
-  // await deployer.deploy(ERC20TransferProxy);
-  // await deployer.deploy(ExchangeStateV1);
-  // await deployer.deploy(ExchangeOrdersHolderV1);
+  await deployer.deploy(WETH);
+  await deployer.deploy(TransferProxy);
+  await deployer.deploy(TransferProxyForDeprecated);
+  await deployer.deploy(ERC20TransferProxy);
+  await deployer.deploy(ExchangeStateV1);
+  await deployer.deploy(ExchangeOrdersHolderV1);
 
-  // const [
-  //   mintableTokenInst,
-  //   raribleTokenInst,
-  //   wethInst,
-  //   transferProxyInst,
-  //   transferProxyForDeprecatedInst,
-  //   erc20TransferProxyInst,
-  //   exchangeStateV1Inst,
-  //   exchangeOrdersHolderV1Inst,
-  // ] = await Promise.all([
-  //   MintableToken.deployed(),
-  //   RaribleToken.deployed(),
-  //   WETH.deployed(),
-  //   TransferProxy.deployed(),
-  //   TransferProxyForDeprecated.deployed(),
-  //   ERC20TransferProxy.deployed(),
-  //   ExchangeStateV1.deployed(),
-  //   ExchangeOrdersHolderV1.deployed(),
-  // ]);
+  const [
+    mintableTokenInst,
+    raribleTokenInst,
+    wethInst,
+    transferProxyInst,
+    transferProxyForDeprecatedInst,
+    erc20TransferProxyInst,
+    exchangeStateV1Inst,
+    exchangeOrdersHolderV1Inst,
+  ] = await Promise.all([
+    MintableToken.deployed(),
+    RaribleToken.deployed(),
+    WETH.deployed(),
+    TransferProxy.deployed(),
+    TransferProxyForDeprecated.deployed(),
+    ERC20TransferProxy.deployed(),
+    ExchangeStateV1.deployed(),
+    ExchangeOrdersHolderV1.deployed(),
+  ]);
 
-  // await deployer.deploy(
-  //   ExchangeV1,
-  //   transferProxyInst.address,
-  //   transferProxyForDeprecatedInst.address,
-  //   erc20TransferProxyInst.address,
-  //   exchangeStateV1Inst.address,
-  //   exchangeOrdersHolderV1Inst.address,
-  //   BENEFICIARY_ADDRESS,
-  //   BUYER_FEE_SIGNER_ADDRESS
-  // );
+  await deployer.deploy(
+    ExchangeV1,
+    transferProxyInst.address,
+    transferProxyForDeprecatedInst.address,
+    erc20TransferProxyInst.address,
+    exchangeStateV1Inst.address,
+    exchangeOrdersHolderV1Inst.address,
+    BENEFICIARY_ADDRESS,
+    BUYER_FEE_SIGNER_ADDRESS
+  );
 
-  // const exchangeV1Inst = await ExchangeV1.deployed();
+  const exchangeV1Inst = await ExchangeV1.deployed();
 
-  // await transferProxyInst.addOperator(exchangeV1Inst.address);
-  // await transferProxyForDeprecatedInst.addOperator(exchangeV1Inst.address);
-  // await erc20TransferProxyInst.addOperator(exchangeV1Inst.address);
-  // await exchangeStateV1Inst.addOperator(exchangeV1Inst.address);
+  await transferProxyInst.addOperator(exchangeV1Inst.address);
+  await transferProxyForDeprecatedInst.addOperator(exchangeV1Inst.address);
+  await erc20TransferProxyInst.addOperator(exchangeV1Inst.address);
+  await exchangeStateV1Inst.addOperator(exchangeV1Inst.address);
 
-  // console.log(`MintableToken: ${mintableTokenInst.address}`);
-  // console.log(`RaribleToken: ${raribleTokenInst.address}`);
-  // console.log(`WETH: ${wethInst.address}`);
-  // console.log(`TransferProxy: ${transferProxyInst.address}`);
-  // console.log(`TransferProxyForDeprecated: ${transferProxyForDeprecatedInst.address}`);
-  // console.log(`ERC20TransferProxy: ${erc20TransferProxyInst.address}`);
-  // console.log(`ExchangeStateV1: ${exchangeStateV1Inst.address}`);
-  // console.log(`ExchangeOrdersHolderV1: ${exchangeOrdersHolderV1Inst.address}`);
-  // console.log(`ExchangeV1: ${exchangeV1Inst.address}`);
+  console.log(`MintableToken: ${mintableTokenInst.address}`);
+  console.log(`RaribleToken: ${raribleTokenInst.address}`);
+  console.log(`WETH: ${wethInst.address}`);
+  console.log(`TransferProxy: ${transferProxyInst.address}`);
+  console.log(`TransferProxyForDeprecated: ${transferProxyForDeprecatedInst.address}`);
+  console.log(`ERC20TransferProxy: ${erc20TransferProxyInst.address}`);
+  console.log(`ExchangeStateV1: ${exchangeStateV1Inst.address}`);
+  console.log(`ExchangeOrdersHolderV1: ${exchangeOrdersHolderV1Inst.address}`);
+  console.log(`ExchangeV1: ${exchangeV1Inst.address}`);
 };
