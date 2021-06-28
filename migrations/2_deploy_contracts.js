@@ -12,7 +12,9 @@ const ExchangeStateV1 = artifacts.require('ExchangeStateV1');
 const ExchangeOrdersHolderV1 = artifacts.require('ExchangeOrdersHolderV1');
 const ExchangeV1 = artifacts.require('ExchangeV1');
 
-module.exports = async function (deployer) {
+module.exports = async function (deployer, network) {
+  if (network === 'development') return;
+
   const NAME = 'Tokenplay Token';
   const SYMBOL = 'TOP';
   const SIGNER_ADDRESS = '0xd6e323D7215EA5349A7B83CA3c4B415993fEF960';

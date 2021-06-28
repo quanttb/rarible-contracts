@@ -25,6 +25,7 @@ contract('MintableToken', function (accounts) {
     sellerPrivateKey,
     buyerPrivateKey
   ] = privateKeys;
+
   let mintableToken;
 
   const NAME = '721';
@@ -51,9 +52,9 @@ contract('MintableToken', function (accounts) {
     const hash = web3.utils.soliditySha3(mintableToken.address, TOKEN_ID);
     const privateKey = Buffer.from(signerPrivateKey, 'hex');
     const signature = util.ecsign(util.toBuffer(hash), privateKey);
+    const v = signature.v;
     const r = util.bufferToHex(signature.r);
     const s = util.bufferToHex(signature.s);
-    const v = signature.v;
 
     await mintableToken.mint(
       TOKEN_ID,

@@ -2,7 +2,7 @@ const util = require('ethereumjs-util');
 
 const MintableToken = artifacts.require('MintableToken');
 
-contract('MintableToken', function (accounts) {
+contract('Simulation', function (accounts) {
   const signerPrivateKey = '8c7cab6c9ef311af22bbce86e48d3d62ca34cbc0403c737667fe8570877ae201';
   const mintableTokenAddress = '0x7399351922F24D1cb754a23196CC0be217D58114';
 

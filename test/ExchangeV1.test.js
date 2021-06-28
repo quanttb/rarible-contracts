@@ -38,6 +38,7 @@ contract('ExchangeV1', function (accounts) {
     sellerPrivateKey,
     buyerPrivateKey
   ] = privateKeys;
+
   let raribleToken;
   let transferProxy;
   let transferProxyForDeprecated;
@@ -47,18 +48,17 @@ contract('ExchangeV1', function (accounts) {
   let exchangeV1;
   let weth;
 
-  const NAME = 'a';
-  const SYMBOL = 'a';
-  const CONTRACT_URI = 'a';
-  const TOKEN_URI_PREFIX = 'a';
+  const NAME = 'NFT';
+  const SYMBOL = 'NFT';
+  const CONTRACT_URI = '';
+  const TOKEN_URI_PREFIX = '';
 
   const TOKEN_ID = 1;
   const ROYALTY = 1000;
   const SUPPLY = 10;
-  const URI = `/test_${TOKEN_ID}`;
+  const URI = 'test';
 
   const ONE_ETHER = '100000000000000000000';
-  const TWO_ETHER = '100000000000000000000';
 
   before('setup', async function () {
     raribleToken = await RaribleToken.new(
@@ -97,7 +97,7 @@ contract('ExchangeV1', function (accounts) {
     await weth.approve(erc20TransferProxy.address, ONE_ETHER, { from: buyer });
   });
 
-  it('mint', async () => {
+  it('mint 721', async () => {
     const hash = web3.utils.soliditySha3(raribleToken.address, TOKEN_ID);
     const privateKey = Buffer.from(signerPrivateKey, 'hex');
     const signature = util.ecsign(util.toBuffer(hash), privateKey);
@@ -127,36 +127,7 @@ contract('ExchangeV1', function (accounts) {
     );
   });
 
-  // it('mint again', async () => {
-  //   const hash = web3.utils.soliditySha3(raribleToken.address, TOKEN_ID + 1);
-  //   const privateKey = Buffer.from(signerPrivateKey, 'hex');
-  //   const signature = util.ecsign(util.toBuffer(hash), privateKey);
-  //   const r = util.bufferToHex(signature.r);
-  //   const s = util.bufferToHex(signature.s);
-  //   const v = signature.v;
-
-  //   await raribleToken.mint(
-  //     TOKEN_ID + 1,
-  //     v,
-  //     r,
-  //     s,
-  //     [{ recipient: buyer, value: ROYALTY }],
-  //     SUPPLY,
-  //     URI,
-  //     {
-  //       from: buyer,
-  //     }
-  //   );
-  //   await raribleToken.setApprovalForAll(
-  //     transferProxy.address,
-  //     true,
-  //     {
-  //       from: buyer,
-  //     }
-  //   );
-  // });
-
-  it('exchange', async () => {
+  it('exchange weth for 721', async () => {
     const sellOrder = {
       key: {
         owner: seller,
@@ -171,15 +142,9 @@ contract('ExchangeV1', function (accounts) {
           tokenId: 0,
           assetType: 1,
         },
-        // buyAsset: {
-        //   token: raribleToken.address,
-        //   tokenId: TOKEN_ID + 1,
-        //   assetType: 2,
-        // },
       },
       selling: 1,
       buying: ONE_ETHER,
-      // buying: 1,
       sellerFee: 2500,
     };
 
