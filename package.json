@@ -1,12 +1,11 @@
 {
-  "name": "truffle",
-  "version": "1.0.0",
+  "name": "rarible-contracts",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "compile": "truffle compile",
-    "test": "truffle test",
-    "test:dev": "truffle test --show-events",
+    "test": "truffle test --network test",
+    "test:dev": "truffle test --network test --show-events",
     "start:dev": "ganache-cli --account_keys_path ./accounts.json",
     "migrate:dev": "truffle migrate",
     "console:dev": "truffle console",
@@ -17,14 +16,9 @@
     "migrate:localhost": "truffle migrate --network localhost",
     "console:localhost": "truffle console --network localhost"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "tranthienbaoquan@gmail.com",
+  "license": "MIT",
   "dependencies": {
-    "@truffle/hdwallet-provider": "^1.4.0",
-    "ethereumjs-util": "^7.0.10",
-    "fs": "^0.0.1-security",
-    "ganache-cli": "^6.12.2",
-    "truffle": "^5.3.10"
+    "@truffle/hdwallet-provider": "^1.4.1"
   }
 }

@@ -10,6 +10,11 @@ module.exports = {
       port: 8545,
       network_id: '*',
     },
+    test: {
+      host: '127.0.0.1',
+      port: 8545,
+      network_id: '*',
+    },
     bsc_testnet: {
       provider: () =>
         new HDWalletProvider(
@@ -36,14 +41,6 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true,
     },
-    localhost: {
-      provider: () =>
-        new HDWalletProvider(privateKeys, `http://127.0.0.1:8545`, 0, 1),
-      network_id: 1,
-      confirmations: 2,
-      timeoutBlocks: 200,
-      skipDryRun: true,
-    },
   },
 
   mocha: {
@@ -52,12 +49,13 @@ module.exports = {
 
   compilers: {
     solc: {
-      version: '0.5.17',
+      version: '0.7.6',
       settings: {
         optimizer: {
           enabled: true,
           runs: 200,
         },
+        evmVersion: 'istanbul'
       },
     },
   },
