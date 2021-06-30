@@ -97,7 +97,7 @@ contract('ExchangeV1', function (accounts) {
     await weth.approve(erc20TransferProxy.address, ONE_ETHER, { from: buyer });
   });
 
-  it('mint 721', async () => {
+  it('mint 1155', async () => {
     const hash = web3.utils.soliditySha3(raribleToken.address, TOKEN_ID);
     const privateKey = Buffer.from(signerPrivateKey, 'hex');
     const signature = util.ecsign(util.toBuffer(hash), privateKey);
@@ -127,7 +127,7 @@ contract('ExchangeV1', function (accounts) {
     );
   });
 
-  it('exchange weth for 721', async () => {
+  it('exchange weth for 1155', async () => {
     const sellOrder = {
       key: {
         owner: seller,

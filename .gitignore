@@ -4,3 +4,4 @@ build
 .secret
 accounts.json
 yarn.lock
+*.log
