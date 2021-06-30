@@ -17,6 +17,19 @@ truffle-flattener ${PROTOCOL_DIR}/tokens/contracts/erc-721/ERC721Rarible.sol |
   awk '/SPDX-License-Identifier/&&c++>0 {next} 1' |
   awk '/pragma abicoder/&&c++>0 {next} 1' >${OUTPUT_DIR}/ERC721Rarible.sol
 
+cd ${PROTOCOL_DIR}/transfer-proxy
+truffle-flattener ${PROTOCOL_DIR}/transfer-proxy/contracts/proxy/TransferProxy.sol |
+  awk '/SPDX-License-Identifier/&&c++>0 {next} 1' |
+  awk '/pragma abicoder/&&c++>0 {next} 1' >${OUTPUT_DIR}/TransferProxy.sol
+truffle-flattener ${PROTOCOL_DIR}/transfer-proxy/contracts/proxy/ERC20TransferProxy.sol |
+  awk '/SPDX-License-Identifier/&&c++>0 {next} 1' |
+  awk '/pragma abicoder/&&c++>0 {next} 1' >${OUTPUT_DIR}/ERC20TransferProxy.sol
+
+cd ${PROTOCOL_DIR}/royalties-registry
+truffle-flattener ${PROTOCOL_DIR}/royalties-registry/contracts/RoyaltiesRegistry.sol |
+  awk '/SPDX-License-Identifier/&&c++>0 {next} 1' |
+  awk '/pragma abicoder/&&c++>0 {next} 1' >${OUTPUT_DIR}/RoyaltiesRegistry.sol
+
 cd ${PROTOCOL_DIR}/exchange-v2
 truffle-flattener ${PROTOCOL_DIR}/exchange-v2/contracts/ExchangeV2.sol |
   awk '/SPDX-License-Identifier/&&c++>0 {next} 1' |

@@ -10,6 +10,14 @@ cd ${PROTOCOL_DIR}/tokens
 rm -rf ${PROTOCOL_DIR}/tokens/build
 truffle compile
 
+cd ${PROTOCOL_DIR}/transfer-proxy
+rm -rf ${PROTOCOL_DIR}/transfer-proxy/build
+truffle compile
+
+cd ${PROTOCOL_DIR}/royalties-registry
+rm -rf ${PROTOCOL_DIR}/royalties-registry/build
+truffle compile
+
 cd ${PROTOCOL_DIR}/exchange-v2
 rm -rf ${PROTOCOL_DIR}/exchange-v2/build
 truffle compile
