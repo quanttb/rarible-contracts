@@ -57,8 +57,10 @@ contract('ExchangeV1', function (accounts) {
   const ROYALTY = 1000;
   const SUPPLY = 10;
   const URI = 'test';
+  const BUYER_FEE = 0;
 
-  const ONE_ETHER = '100000000000000000000';
+  const ONE_ETHER = '1000000000000000000';
+  const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
   before('setup', async function () {
     raribleToken = await RaribleToken.new(
@@ -178,7 +180,6 @@ contract('ExchangeV1', function (accounts) {
     );
     const signature = web3.eth.accounts.sign(hash.slice(2), sellerPrivateKey);
 
-    const buyerFee = 0;
     const buyerFeeHash = web3.utils.keccak256(
       web3.eth.abi.encodeParameters(
         [
@@ -205,7 +206,7 @@ contract('ExchangeV1', function (accounts) {
           },
           "uint256"
         ],
-        [sellOrder, buyerFee]
+        [sellOrder, BUYER_FEE]
       )
     );
 
@@ -218,7 +219,7 @@ contract('ExchangeV1', function (accounts) {
         r: signature.r,
         s: signature.s,
       },
-      buyerFee,
+      BUYER_FEE,
       {
         v: buyerFeeSignature.v,
         r: buyerFeeSignature.r,
@@ -228,6 +229,111 @@ contract('ExchangeV1', function (accounts) {
       buyer,
       {
         from: buyer,
+      }
+    );
+  });
+
+  it('exchange eth for 1155', async () => {
+    const sellOrder = {
+      key: {
+        owner: seller,
+        salt: 1,
+        sellAsset: {
+          token: raribleToken.address,
+          tokenId: TOKEN_ID,
+          assetType: 2,
+        },
+        buyAsset: {
+          token: ZERO_ADDRESS,
+          tokenId: 0,
+          assetType: 0,
+        },
+      },
+      selling: 1,
+      buying: ONE_ETHER,
+      sellerFee: 2500,
+    };
+
+    const hash = web3.utils.keccak256(
+      web3.eth.abi.encodeParameters(
+        [
+          {
+            Order: {
+              key: {
+                owner: 'address',
+                salt: 'uint256',
+                sellAsset: {
+                  token: 'address',
+                  tokenId: 'uint256',
+                  assetType: 'uint',
+                },
+                buyAsset: {
+                  token: 'address',
+                  tokenId: 'uint256',
+                  assetType: 'uint',
+                },
+              },
+              selling: 'uint256',
+              buying: 'uint256',
+              sellerFee: 'uint256',
+            },
+          },
+        ],
+        [sellOrder]
+      )
+    );
+    const signature = web3.eth.accounts.sign(hash.slice(2), sellerPrivateKey);
+
+    const buyerFeeHash = web3.utils.keccak256(
+      web3.eth.abi.encodeParameters(
+        [
+          {
+            Order: {
+              key: {
+                owner: 'address',
+                salt: 'uint256',
+                sellAsset: {
+                  token: 'address',
+                  tokenId: 'uint256',
+                  assetType: 'uint',
+                },
+                buyAsset: {
+                  token: 'address',
+                  tokenId: 'uint256',
+                  assetType: 'uint',
+                },
+              },
+              selling: 'uint256',
+              buying: 'uint256',
+              sellerFee: 'uint256',
+            },
+          },
+          "uint256"
+        ],
+        [sellOrder, BUYER_FEE]
+      )
+    );
+
+    const buyerFeeSignature = web3.eth.accounts.sign(buyerFeeHash.slice(2), buyerFeeSignerPrivateKey);
+
+    await exchangeV1.exchange(
+      sellOrder,
+      {
+        v: signature.v,
+        r: signature.r,
+        s: signature.s,
+      },
+      BUYER_FEE,
+      {
+        v: buyerFeeSignature.v,
+        r: buyerFeeSignature.r,
+        s: buyerFeeSignature.s,
+      },
+      1,
+      buyer,
+      {
+        from: buyer,
+        value: ONE_ETHER,
       }
     );
   });

@@ -7,7 +7,7 @@
     "compile": "truffle compile",
     "test": "truffle test",
     "test:dev": "truffle test --show-events",
-    "start:dev": "ganache-cli --account_keys_path ./accounts.json --port 3003",
+    "start:dev": "ganache-cli --account_keys_path ./accounts.json",
     "migrate:dev": "truffle migrate",
     "console:dev": "truffle console",
     "migrate:bsc-testnet": "truffle migrate --network bsc_testnet",

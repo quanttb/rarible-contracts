@@ -7,7 +7,7 @@ module.exports = {
   networks: {
     development: {
       host: '127.0.0.1',
-      port: 3003,
+      port: 8545,
       network_id: '*',
     },
     bsc_testnet: {
