@@ -17,13 +17,13 @@ chmod +x *.sh
 
 ## Useful links
 
-[BSC Testnet Faucet](https://testnet.binance.org/faucet-smart)
-
-[BSC Testnet Explorer](https://testnet.bscscan.com/)
-
 [Ropsten Faucet](https://faucet.dimensions.network/)
 
 [Ropsten Explorer](https://ropsten.etherscan.io/)
+
+[BSC Testnet Faucet](https://testnet.binance.org/faucet-smart)
+
+[BSC Testnet Explorer](https://testnet.bscscan.com/)
 
 [ABI Encoding Service](https://abi.hashex.org/)
 

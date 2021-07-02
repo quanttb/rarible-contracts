@@ -1,23 +1,9 @@
-const util = require('ethereumjs-util');
-const fs = require('fs');
-const path = require('path');
-
 const { sign } = require('./mint');
-
-const accountsFromFile = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '..', 'accounts.json'), 'utf8')
-);
 
 const ERC1155Rarible = artifacts.require('ERC1155Rarible');
 
 contract('ERC1155Rarible', function (accounts) {
-  const privateKeys = accounts.map((a) => {
-    return accountsFromFile.private_keys[a.toLowerCase()];
-  });
-
   let [owner, seller, buyer, proxy] = accounts;
-  let [ownerPrivateKey, sellerPrivateKey, buyerPrivateKey, proxyPrivateKey] =
-    privateKeys;
 
   let erc1155Rarible;
 
