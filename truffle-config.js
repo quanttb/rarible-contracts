@@ -5,12 +5,7 @@ const privateKeys = [fs.readFileSync('.secret').toString().trim()];
 
 module.exports = {
   networks: {
-    development: {
-      host: '127.0.0.1',
-      port: 8545,
-      network_id: '*',
-    },
-    test: {
+    ganache: {
       host: '127.0.0.1',
       port: 8545,
       network_id: '*',
@@ -44,7 +39,7 @@ module.exports = {
   },
 
   mocha: {
-    timeout: 10000
+    timeout: 10000,
   },
 
   compilers: {
@@ -55,7 +50,7 @@ module.exports = {
           enabled: true,
           runs: 200,
         },
-        evmVersion: 'istanbul'
+        evmVersion: 'istanbul',
       },
     },
   },

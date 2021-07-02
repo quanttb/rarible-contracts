@@ -46,14 +46,14 @@ module.exports = async function (deployer, network) {
     NAME,
     SYMBOL,
     BASE_URI,
-    CONTRACT_URI,
+    CONTRACT_URI
   );
 
   await erc1155RaribleInst.__ERC1155Rarible_init(
     NAME,
     SYMBOL,
     BASE_URI,
-    CONTRACT_URI,
+    CONTRACT_URI
   );
 
   await erc20TransferProxyInst.__ERC20TransferProxy_init();
@@ -68,7 +68,7 @@ module.exports = async function (deployer, network) {
     erc20TransferProxyInst.address,
     PROTOCOL_FEE,
     DEFAULT_FEE_RECEIVER,
-    royaltiesRegistryInst.address,
+    royaltiesRegistryInst.address
   );
 
   console.log(`ERC721Rarible: ${erc721RaribleInst.address}`);
