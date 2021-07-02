@@ -6,6 +6,8 @@ set -euo pipefail
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)
 PROTOCOL_DIR=${SCRIPT_DIR}/../protocol-contracts
 
+git submodule update --recursive --remote
+
 cd ${PROTOCOL_DIR}/tokens
 # rm -rf ${PROTOCOL_DIR}/tokens/node_modules
 yarn install

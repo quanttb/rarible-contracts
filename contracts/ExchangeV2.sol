@@ -336,7 +336,7 @@ library LibMath {
 // File: @rarible/lib-asset/contracts/LibAsset.sol
 
 
-pragma solidity >=0.6.9 <0.8.0;
+pragma solidity 0.7.6;
 
 library LibAsset {
     bytes4 constant public ETH_ASSET_CLASS = bytes4(keccak256("ETH"));
@@ -2079,7 +2079,7 @@ abstract contract RaribleTransferManager is OwnableUpgradeable, ITransferManager
         (address token, uint tokenId) = abi.decode(matchNft.data, (address, uint));
         LibPart.Part[] memory fees = royaltiesRegistry.getRoyalties(token, tokenId);
         (uint result, uint totalRoyalties) = transferFees(matchCalculate, rest, amount, fees, from, transferDirection, ROYALTY);
-        require(totalRoyalties <= 3000, "Royalties are too high (>30$)");
+        require(totalRoyalties <= 5000, "Royalties are too high (>50%)");
         return result;
     }
 

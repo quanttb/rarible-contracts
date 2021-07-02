@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "compile": "truffle compile",
-    "test": "truffle test --network test",
-    "test:dev": "truffle test --network test --show-events",
+    "test": "truffle test",
+    "test:dev": "truffle test --show-events",
     "start:dev": "ganache-cli --account_keys_path ./accounts.json",
     "migrate:dev": "truffle migrate",
     "console:dev": "truffle console",
@@ -19,7 +19,6 @@
   "author": "tranthienbaoquan@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@truffle/hdwallet-provider": "^1.4.1",
-    "ethereumjs-util": "^7.0.10"
+    "@truffle/hdwallet-provider": "^1.4.1"
   }
 }

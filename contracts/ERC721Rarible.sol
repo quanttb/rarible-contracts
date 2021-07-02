@@ -2136,12 +2136,11 @@ library LibERC721LazyMint {
 
 }
 
-// File: contracts/lazy-mint/IERC721LazyMint.sol
+// File: @rarible/lazy-mint/contracts/erc-721/IERC721LazyMint.sol
 
 
 pragma solidity >=0.6.2 <0.8.0;
 
-// import "./LibERC721LazyMint.sol";
 
 
 
@@ -2459,7 +2458,6 @@ pragma solidity >=0.6.2 <0.8.0;
 
 
 
-// import "@rarible/lazy-mint/contracts/erc-721/IERC721LazyMint.sol";
 
 
 

@@ -1450,12 +1450,11 @@ library LibERC1155LazyMint {
     }
 }
 
-// File: contracts/lazy-mint/IERC1155LazyMint.sol
+// File: @rarible/lazy-mint/contracts/erc-1155/IERC1155LazyMint.sol
 
 
 pragma solidity >=0.6.2 <0.8.0;
 
-// import "./LibERC1155LazyMint.sol";
 
 
 
@@ -1884,7 +1883,6 @@ pragma solidity >=0.6.2 <0.8.0;
 
 
 
-// import "@rarible/lazy-mint/contracts/erc-1155/IERC1155LazyMint.sol";
 
 
 
