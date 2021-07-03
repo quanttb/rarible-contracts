@@ -11,8 +11,7 @@ contract('ERC1155Rarible', function (accounts) {
   const SYMBOL = 'NFTTIFY';
   const BASE_URI = '';
   const CONTRACT_URI = '';
-  const ZERO_WORD =
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
+  const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
   beforeEach('setup', async function () {
     erc1155Rarible = await ERC1155Rarible.new({ from: owner });
@@ -33,7 +32,7 @@ contract('ERC1155Rarible', function (accounts) {
     const amount = 1;
 
     await erc1155Rarible.mintAndTransfer(
-      [tokenId, uri, totalSupply, creators([seller]), [], [ZERO_WORD]],
+      [tokenId, uri, totalSupply, creators([seller]), [], [ZERO_ADDRESS]],
       buyer,
       amount,
       { from: seller }
@@ -47,7 +46,7 @@ contract('ERC1155Rarible', function (accounts) {
     const amount = 1;
 
     await erc1155Rarible.transferFromOrMint(
-      [tokenId, uri, totalSupply, creators([seller]), [], [ZERO_WORD]],
+      [tokenId, uri, totalSupply, creators([seller]), [], [ZERO_ADDRESS]],
       seller,
       buyer,
       amount,

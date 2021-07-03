@@ -610,4 +610,12 @@ contract WETH is ERC20 {
     constructor () ERC20('Wrapped Ether', 'WETH') {
         _mint(msg.sender, 1000000000 * (10 ** uint256(decimals())));
     }
+
+    function mint(uint amount) external {
+        _mint(msg.sender, amount);
+    }
+
+    function mintTo(address to, uint amount) external {
+        _mint(to, amount);
+    }
 }

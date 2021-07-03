@@ -18,6 +18,12 @@ truffle-flattener ${PROTOCOL_DIR}/tokens/contracts/erc-721/ERC721Rarible.sol |
   awk '/pragma abicoder/&&c++>0 {next} 1' >${OUTPUT_DIR}/ERC721Rarible.sol
 
 cd ${PROTOCOL_DIR}/transfer-proxy
+truffle-flattener ${PROTOCOL_DIR}/transfer-proxy/contracts/lazy-mint/erc721/ERC721LazyMintTransferProxy.sol |
+  awk '/SPDX-License-Identifier/&&c++>0 {next} 1' |
+  awk '/pragma abicoder/&&c++>0 {next} 1' >${OUTPUT_DIR}/ERC721LazyMintTransferProxy.sol
+truffle-flattener ${PROTOCOL_DIR}/transfer-proxy/contracts/lazy-mint/erc1155/ERC1155LazyMintTransferProxy.sol |
+  awk '/SPDX-License-Identifier/&&c++>0 {next} 1' |
+  awk '/pragma abicoder/&&c++>0 {next} 1' >${OUTPUT_DIR}/ERC1155LazyMintTransferProxy.sol
 truffle-flattener ${PROTOCOL_DIR}/transfer-proxy/contracts/proxy/TransferProxy.sol |
   awk '/SPDX-License-Identifier/&&c++>0 {next} 1' |
   awk '/pragma abicoder/&&c++>0 {next} 1' >${OUTPUT_DIR}/TransferProxy.sol

@@ -1,19 +1,23 @@
 const { Order, Asset, sign } = require('./order');
-const { ETH, ERC20, ERC721, ERC1155, enc, id } = require('./assets');
+const { ETH, ERC1155, enc } = require('./assets');
 
 const ERC1155Rarible = artifacts.require('ERC1155Rarible');
 const WETH = artifacts.require('WETH');
 const ERC20TransferProxy = artifacts.require('ERC20TransferProxy');
 const TransferProxy = artifacts.require('TransferProxy');
+const ERC1155LazyMintTransferProxy = artifacts.require(
+  'ERC1155LazyMintTransferProxy'
+);
 const RoyaltiesRegistry = artifacts.require('RoyaltiesRegistry');
 const ExchangeV2 = artifacts.require('ExchangeV2');
 
 contract('ExchangeV2', function (accounts) {
-  let [owner, seller, buyer, proxy, feeReceiver] = accounts;
+  let [owner, seller, buyer, feeReceiver] = accounts;
 
   let erc1155Rarible,
     weth,
     transferProxy,
+    erc1155LazyMintTransferProxy,
     erc20TransferProxy,
     royaltiesRegistry,
     exchangeV2;
@@ -25,13 +29,15 @@ contract('ExchangeV2', function (accounts) {
   const PROTOCOL_FEE = 250;
 
   const ONE_ETHER = '1000000000000000000';
-  const ZERO_WORD =
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
+  const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
   beforeEach('setup', async function () {
     erc1155Rarible = await ERC1155Rarible.new({ from: owner });
     weth = await WETH.new({ from: owner });
     transferProxy = await TransferProxy.new({ from: owner });
+    erc1155LazyMintTransferProxy = await ERC1155LazyMintTransferProxy.new({
+      from: owner,
+    });
     erc20TransferProxy = await ERC20TransferProxy.new({ from: owner });
     royaltiesRegistry = await RoyaltiesRegistry.new({ from: owner });
     exchangeV2 = await ExchangeV2.new({ from: owner });
@@ -60,15 +66,28 @@ contract('ExchangeV2', function (accounts) {
     );
   });
 
-  it('matchOrders', async () => {
-    await weth.transfer(seller, ONE_ETHER, { from: owner });
-    await weth.approve(erc20TransferProxy.address, ONE_ETHER, { from: seller });
+  it('ERC1155 to ETH', async () => {
+    const tokenId = seller + 'b00000000000000000000001';
+    const uri = '';
+    const totalSupply = 10;
+    const amount = 1;
+
+    await erc1155Rarible.mintAndTransfer(
+      [tokenId, uri, totalSupply, [[seller, 10000]], [], [ZERO_ADDRESS]],
+      buyer,
+      amount,
+      { from: seller }
+    );
+
+    await erc1155Rarible.setApprovalForAll(transferProxy.address, true, {
+      from: seller,
+    });
 
     const left = Order(
       seller,
-      Asset(ERC20, enc(weth.address), 100),
-      ZERO_WORD,
-      Asset(ETH, '0x', 100),
+      Asset(ERC1155, enc(erc1155Rarible.address), tokenId),
+      ZERO_ADDRESS,
+      Asset(ETH, '0x', ONE_ETHER),
       1,
       0,
       0,
@@ -77,9 +96,9 @@ contract('ExchangeV2', function (accounts) {
     );
     const right = Order(
       buyer,
-      Asset(ETH, '0x', 100),
-      ZERO_WORD,
-      Asset(ERC20, enc(weth.address), 100),
+      Asset(ETH, '0x', ONE_ETHER),
+      ZERO_ADDRESS,
+      Asset(ERC1155, enc(erc1155Rarible.address), tokenId),
       1,
       0,
       0,
@@ -92,7 +111,7 @@ contract('ExchangeV2', function (accounts) {
       await getSignature(left, seller),
       right,
       '0x',
-      { from: buyer, value: 100 }
+      { from: buyer, value: ONE_ETHER }
     );
   });
 
