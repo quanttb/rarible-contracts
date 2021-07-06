@@ -1,5 +1,5 @@
 const { Order, Asset, sign } = require('./order');
-const { ETH, ERC1155, enc } = require('./assets');
+const { ETH, ERC20, ERC1155, enc } = require('./assets');
 
 const ERC1155Rarible = artifacts.require('ERC1155Rarible');
 const WETH = artifacts.require('WETH');
@@ -66,26 +66,13 @@ contract('ExchangeV2', function (accounts) {
     );
   });
 
-  it('ERC1155 to ETH', async () => {
-    const tokenId = seller + 'b00000000000000000000001';
-    const uri = '';
-    const totalSupply = 10;
-    const amount = 1;
-
-    await erc1155Rarible.mintAndTransfer(
-      [tokenId, uri, totalSupply, [[seller, 10000]], [], [ZERO_ADDRESS]],
-      buyer,
-      amount,
-      { from: seller }
-    );
-
-    await erc1155Rarible.setApprovalForAll(transferProxy.address, true, {
-      from: seller,
-    });
+  it('ERC20 to ETH', async () => {
+    await weth.mint(ONE_ETHER, { from: seller });
+    await weth.approve(erc20TransferProxy.address, ONE_ETHER, { from: seller });
 
     const left = Order(
       seller,
-      Asset(ERC1155, enc(erc1155Rarible.address), tokenId),
+      Asset(ERC20, enc(weth.address), ONE_ETHER),
       ZERO_ADDRESS,
       Asset(ETH, '0x', ONE_ETHER),
       1,
@@ -98,7 +85,7 @@ contract('ExchangeV2', function (accounts) {
       buyer,
       Asset(ETH, '0x', ONE_ETHER),
       ZERO_ADDRESS,
-      Asset(ERC1155, enc(erc1155Rarible.address), tokenId),
+      Asset(ERC20, enc(weth.address), ONE_ETHER),
       1,
       0,
       0,
@@ -106,12 +93,61 @@ contract('ExchangeV2', function (accounts) {
       '0x'
     );
 
-    exchangeV2.matchOrders(
+    await exchangeV2.matchOrders(
       left,
       await getSignature(left, seller),
       right,
       '0x',
-      { from: buyer, value: ONE_ETHER }
+      { from: buyer, value: '2000000000000000000' }
+    );
+  });
+
+  it('ERC1155 to ETH', async () => {
+    const tokenId = seller + 'b00000000000000000000001';
+    const uri = '';
+    const totalSupply = 10;
+    const amount = 1;
+
+    await erc1155Rarible.mintAndTransfer(
+      [tokenId, uri, totalSupply, [[seller, 10000]], [], [ZERO_ADDRESS]],
+      seller,
+      amount,
+      { from: seller }
+    );
+
+    await erc1155Rarible.setApprovalForAll(transferProxy.address, true, {
+      from: seller,
+    });
+
+    const left = Order(
+      seller,
+      Asset(ERC1155, enc(erc1155Rarible.address, tokenId), amount),
+      ZERO_ADDRESS,
+      Asset(ETH, '0x', ONE_ETHER),
+      1,
+      0,
+      0,
+      '0xffffffff',
+      '0x'
+    );
+    const right = Order(
+      buyer,
+      Asset(ETH, '0x', ONE_ETHER),
+      ZERO_ADDRESS,
+      Asset(ERC1155, enc(erc1155Rarible.address, tokenId), amount),
+      1,
+      0,
+      0,
+      '0xffffffff',
+      '0x'
+    );
+
+    await exchangeV2.matchOrders(
+      left,
+      await getSignature(left, seller),
+      right,
+      '0x',
+      { from: buyer, value: '2000000000000000000' }
     );
   });
 
