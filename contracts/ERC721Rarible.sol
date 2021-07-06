@@ -1970,7 +1970,7 @@ abstract contract ERC721BurnableUpgradeable is Initializable, ContextUpgradeable
 // File: contracts/erc-721/ERC721DefaultApproval.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 abstract contract ERC721DefaultApproval is ERC721Upgradeable {
@@ -2108,7 +2108,7 @@ library LibERC721LazyMint {
 
     struct Mint721Data {
         uint tokenId;
-        string uri;
+        string tokenURI;
         LibPart.Part[] creators;
         LibPart.Part[] royalties;
         bytes[] signatures;
@@ -2128,7 +2128,7 @@ library LibERC721LazyMint {
         return keccak256(abi.encode(
                 MINT_AND_TRANSFER_TYPEHASH,
                 data.tokenId,
-                keccak256(bytes(data.uri)),
+                keccak256(bytes(data.tokenURI)),
                 keccak256(abi.encodePacked(creatorsBytes)),
                 keccak256(abi.encodePacked(royaltiesBytes))
             ));
@@ -2166,7 +2166,7 @@ interface IERC721LazyMint is IERC721Upgradeable {
 // File: contracts/erc-1271/ERC1271.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 abstract contract ERC1271 {
     bytes4 constant public ERC1271_INTERFACE_ID = 0xfb855dc9; // this.isValidSignature.selector
@@ -2404,7 +2404,7 @@ library ECDSAUpgradeable {
 // File: contracts/erc-1271/ERC1271Validator.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -2436,7 +2436,7 @@ abstract contract ERC1271Validator is EIP712Upgradeable {
 // File: contracts/erc-721/Mint721Validator.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -2454,7 +2454,7 @@ contract Mint721Validator is ERC1271Validator {
 // File: contracts/erc-721/ERC721Lazy.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -2499,10 +2499,10 @@ abstract contract ERC721Lazy is IERC721LazyMint, ERC721Upgradeable, Mint721Valid
             }
         }
 
-        _mint(to, data.tokenId);
+        _safeMint(to, data.tokenId);
         _saveRoyalties(data.tokenId, data.royalties);
         _saveCreators(data.tokenId, data.creators);
-        _setTokenURI(data.tokenId, data.uri);
+        _setTokenURI(data.tokenId, data.tokenURI);
     }
 
     function _saveCreators(uint tokenId, LibPart.Part[] memory _creators) internal {
@@ -2533,7 +2533,7 @@ abstract contract ERC721Lazy is IERC721LazyMint, ERC721Upgradeable, Mint721Valid
 // File: contracts/HasContractURI.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 abstract contract HasContractURI is ERC165Upgradeable {
@@ -2564,7 +2564,7 @@ abstract contract HasContractURI is ERC165Upgradeable {
 // File: contracts/erc-721/ERC721Base.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -2590,7 +2590,7 @@ abstract contract ERC721Base is OwnableUpgradeable, ERC721DefaultApproval, ERC72
 // File: contracts/erc-721/ERC721Rarible.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 contract ERC721Rarible is ERC721Base {

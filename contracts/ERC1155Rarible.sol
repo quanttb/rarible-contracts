@@ -1287,7 +1287,7 @@ abstract contract ERC1155BurnableUpgradeable is Initializable, ERC1155Upgradeabl
 // File: contracts/erc-1155/ERC1155DefaultApproval.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 abstract contract ERC1155DefaultApproval is ERC1155Upgradeable {
@@ -1421,7 +1421,7 @@ library LibERC1155LazyMint {
 
     struct Mint1155Data {
         uint tokenId;
-        string uri;
+        string tokenURI;
         uint supply;
         LibPart.Part[] creators;
         LibPart.Part[] royalties;
@@ -1443,7 +1443,7 @@ library LibERC1155LazyMint {
                 MINT_AND_TRANSFER_TYPEHASH,
                 data.tokenId,
                 data.supply,
-                keccak256(bytes(data.uri)),
+                keccak256(bytes(data.tokenURI)),
                 keccak256(abi.encodePacked(creatorsBytes)),
                 keccak256(abi.encodePacked(royaltiesBytes))
             ));
@@ -1486,7 +1486,7 @@ interface IERC1155LazyMint is IERC1155Upgradeable {
 // File: contracts/erc-1271/ERC1271.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 abstract contract ERC1271 {
     bytes4 constant public ERC1271_INTERFACE_ID = 0xfb855dc9; // this.isValidSignature.selector
@@ -1724,7 +1724,7 @@ library ECDSAUpgradeable {
 // File: contracts/erc-1271/ERC1271Validator.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -1756,7 +1756,7 @@ abstract contract ERC1271Validator is EIP712Upgradeable {
 // File: contracts/erc-1155/Mint1155Validator.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -1810,7 +1810,7 @@ library StringsUpgradeable {
 // File: contracts/erc-1155/ERC1155BaseURI.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -1879,7 +1879,7 @@ contract ERC1155BaseURI is ERC1155Upgradeable {
 // File: contracts/erc-1155/ERC1155Lazy.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -1942,7 +1942,7 @@ abstract contract ERC1155Lazy is IERC1155LazyMint, ERC1155BaseURI, Mint1155Valid
             _saveSupply(data.tokenId, data.supply);
             _saveRoyalties(data.tokenId, data.royalties);
             _saveCreators(data.tokenId, data.creators);
-            _setTokenURI(data.tokenId, data.uri);
+            _setTokenURI(data.tokenId, data.tokenURI);
         }
 
         _mint(to, data.tokenId, _amount, "");
@@ -1984,7 +1984,7 @@ abstract contract ERC1155Lazy is IERC1155LazyMint, ERC1155BaseURI, Mint1155Valid
 // File: contracts/HasContractURI.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 abstract contract HasContractURI is ERC165Upgradeable {
@@ -2015,7 +2015,7 @@ abstract contract HasContractURI is ERC165Upgradeable {
 // File: contracts/erc-1155/ERC1155Base.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 
@@ -2053,7 +2053,7 @@ abstract contract ERC1155Base is OwnableUpgradeable, ERC1155DefaultApproval, ERC
 // File: contracts/erc-1155/ERC1155Rarible.sol
 
 
-pragma solidity >=0.6.2 <0.8.0;
+pragma solidity 0.7.6;
 
 
 contract ERC1155Rarible is ERC1155Base {

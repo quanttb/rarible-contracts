@@ -19,6 +19,7 @@
   "author": "tranthienbaoquan@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@truffle/hdwallet-provider": "^1.4.1"
+    "@truffle/hdwallet-provider": "^1.4.1",
+    "bignumber.js": "^9.0.1"
   }
 }

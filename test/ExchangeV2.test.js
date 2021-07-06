@@ -1,6 +1,7 @@
 const { Order, Asset, sign } = require('./order');
 const { sign: lazyMintedSign } = require('./mint');
 const { ETH, ERC20, ERC1155, id, enc, lazyMintedEnc } = require('./assets');
+const BigNumber = require('bignumber.js');
 
 const ERC1155Rarible = artifacts.require('ERC1155Rarible');
 const WETH = artifacts.require('WETH');
@@ -30,7 +31,7 @@ contract('ExchangeV2', function (accounts) {
   const PROTOCOL_FEE = 250;
 
   const ERC721_LAZY = id('ERC721_LAZY');
-  const ONE_ETHER = '1000000000000000000';
+  const ONE_ETHER = BigNumber('1000000000000000000');
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
   beforeEach('setup', async function () {
@@ -91,9 +92,9 @@ contract('ExchangeV2', function (accounts) {
 
     const left = Order(
       seller,
-      Asset(ERC20, enc(weth.address), ONE_ETHER),
+      Asset(ERC20, enc(weth.address), ONE_ETHER.toFixed()),
       ZERO_ADDRESS,
-      Asset(ETH, '0x', ONE_ETHER),
+      Asset(ETH, '0x', ONE_ETHER.toFixed()),
       1,
       0,
       0,
@@ -102,9 +103,9 @@ contract('ExchangeV2', function (accounts) {
     );
     const right = Order(
       buyer,
-      Asset(ETH, '0x', ONE_ETHER),
+      Asset(ETH, '0x', ONE_ETHER.toFixed()),
       ZERO_ADDRESS,
-      Asset(ERC20, enc(weth.address), ONE_ETHER),
+      Asset(ERC20, enc(weth.address), ONE_ETHER.toFixed()),
       1,
       0,
       0,
@@ -117,7 +118,12 @@ contract('ExchangeV2', function (accounts) {
       await getSignature(left, seller),
       right,
       '0x',
-      { from: buyer, value: '2000000000000000000' }
+      {
+        from: buyer,
+        value: ONE_ETHER.times(10000 + PROTOCOL_FEE)
+          .div(10000)
+          .toFixed(),
+      }
     );
   });
 
@@ -142,7 +148,7 @@ contract('ExchangeV2', function (accounts) {
       seller,
       Asset(ERC1155, enc(erc1155Rarible.address, tokenId), amount),
       ZERO_ADDRESS,
-      Asset(ETH, '0x', ONE_ETHER),
+      Asset(ETH, '0x', ONE_ETHER.toFixed()),
       1,
       0,
       0,
@@ -151,7 +157,7 @@ contract('ExchangeV2', function (accounts) {
     );
     const right = Order(
       buyer,
-      Asset(ETH, '0x', ONE_ETHER),
+      Asset(ETH, '0x', ONE_ETHER.toFixed()),
       ZERO_ADDRESS,
       Asset(ERC1155, enc(erc1155Rarible.address, tokenId), amount),
       1,
@@ -166,7 +172,12 @@ contract('ExchangeV2', function (accounts) {
       await getSignature(left, seller),
       right,
       '0x',
-      { from: buyer, value: '2000000000000000000' }
+      {
+        from: buyer,
+        value: ONE_ETHER.times(10000 + PROTOCOL_FEE)
+          .div(10000)
+          .toFixed(),
+      }
     );
   });
 
@@ -205,7 +216,7 @@ contract('ExchangeV2', function (accounts) {
         amount
       ),
       ZERO_ADDRESS,
-      Asset(ETH, '0x', ONE_ETHER),
+      Asset(ETH, '0x', ONE_ETHER.toFixed()),
       1,
       0,
       0,
@@ -214,7 +225,7 @@ contract('ExchangeV2', function (accounts) {
     );
     const right = Order(
       buyer,
-      Asset(ETH, '0x', ONE_ETHER),
+      Asset(ETH, '0x', ONE_ETHER.toFixed()),
       ZERO_ADDRESS,
       Asset(
         ERC721_LAZY,
@@ -240,9 +251,79 @@ contract('ExchangeV2', function (accounts) {
       await getSignature(left, seller),
       right,
       '0x',
-      { from: buyer, value: '2000000000000000000' }
+      {
+        from: buyer,
+        value: ONE_ETHER.times(10000 + PROTOCOL_FEE)
+          .div(10000)
+          .toFixed(),
+      }
     );
   });
+
+  // it('ETH to Lazy Minted ERC1155', async () => {
+  //   const tokenId = seller + 'b00000000000000000000001';
+  //   const uri = '';
+  //   const totalSupply = 10;
+  //   const amount = 1;
+
+  //   await weth.mint(ONE_ETHER.times(2), { from: buyer });
+  //   await weth.approve(erc20TransferProxy.address, ONE_ETHER.times(2), {
+  //     from: buyer,
+  //   });
+
+  //   const left = Order(
+  //     buyer,
+  //     Asset(ERC20, enc(weth.address), ONE_ETHER.toFixed()),
+  //     seller,
+  //     Asset(
+  //       ERC721_LAZY,
+  //       lazyMintedEnc(erc1155Rarible.address, [
+  //         tokenId,
+  //         uri,
+  //         totalSupply,
+  //         [[seller, 10000]],
+  //         [],
+  //         [],
+  //       ]),
+  //       amount
+  //     ),
+  //     1,
+  //     0,
+  //     0,
+  //     '0xffffffff',
+  //     '0x'
+  //   );
+  //   const right = Order(
+  //     seller,
+  //     Asset(
+  //       ERC721_LAZY,
+  //       lazyMintedEnc(erc1155Rarible.address, [
+  //         tokenId,
+  //         uri,
+  //         totalSupply,
+  //         [[seller, 10000]],
+  //         [],
+  //         [],
+  //       ]),
+  //       amount
+  //     ),
+  //     buyer,
+  //     Asset(ERC20, enc(weth.address), ONE_ETHER.toFixed()),
+  //     1,
+  //     0,
+  //     0,
+  //     '0xffffffff',
+  //     '0x'
+  //   );
+
+  //   await exchangeV2.matchOrders(
+  //     left,
+  //     await getSignature(left, buyer),
+  //     right,
+  //     '0x',
+  //     { from: seller }
+  //   );
+  // });
 
   async function getSignature(order, signer) {
     return sign(order, signer, exchangeV2.address);
