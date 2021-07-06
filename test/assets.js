@@ -15,6 +15,80 @@ function enc(token, tokenId) {
   }
 }
 
+function lazyMintedEnc(token, data) {
+  return web3.eth.abi.encodeParameters(
+    [
+      {
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'tokenId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'uri',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'supply',
+            type: 'uint256',
+          },
+          {
+            components: [
+              {
+                internalType: 'address payable',
+                name: 'account',
+                type: 'address',
+              },
+              {
+                internalType: 'uint96',
+                name: 'value',
+                type: 'uint96',
+              },
+            ],
+            internalType: 'struct LibPart.Part[]',
+            name: 'creators',
+            type: 'tuple[]',
+          },
+          {
+            components: [
+              {
+                internalType: 'address payable',
+                name: 'account',
+                type: 'address',
+              },
+              {
+                internalType: 'uint96',
+                name: 'value',
+                type: 'uint96',
+              },
+            ],
+            internalType: 'struct LibPart.Part[]',
+            name: 'royalties',
+            type: 'tuple[]',
+          },
+          {
+            internalType: 'bytes[]',
+            name: 'signatures',
+            type: 'bytes[]',
+          },
+        ],
+        internalType: 'struct LibERC1155LazyMint.Mint1155Data',
+        name: 'data',
+        type: 'tuple',
+      },
+    ],
+    [token, data]
+  );
+}
+
 const ETH = id('ETH');
 const ERC20 = id('ERC20');
 const ERC721 = id('ERC721');
@@ -41,4 +115,5 @@ module.exports = {
   ORIGIN,
   PAYOUT,
   enc,
+  lazyMintedEnc,
 };

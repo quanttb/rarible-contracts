@@ -1,5 +1,6 @@
 const { Order, Asset, sign } = require('./order');
-const { ETH, ERC20, ERC1155, enc } = require('./assets');
+const { sign: lazyMintedSign } = require('./mint');
+const { ETH, ERC20, ERC1155, id, enc, lazyMintedEnc } = require('./assets');
 
 const ERC1155Rarible = artifacts.require('ERC1155Rarible');
 const WETH = artifacts.require('WETH');
@@ -28,6 +29,7 @@ contract('ExchangeV2', function (accounts) {
   const CONTRACT_URI = '';
   const PROTOCOL_FEE = 250;
 
+  const ERC721_LAZY = id('ERC721_LAZY');
   const ONE_ETHER = '1000000000000000000';
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -54,15 +56,32 @@ contract('ExchangeV2', function (accounts) {
     await erc20TransferProxy.__ERC20TransferProxy_init({ from: owner });
     await royaltiesRegistry.__RoyaltiesRegistry_init({ from: owner });
 
-    await transferProxy.addOperator(exchangeV2.address);
-    await erc20TransferProxy.addOperator(exchangeV2.address);
+    await transferProxy.addOperator(exchangeV2.address, { from: owner });
+    await erc20TransferProxy.addOperator(exchangeV2.address, { from: owner });
+    await erc1155LazyMintTransferProxy.__OperatorRole_init({ from: owner });
+    await erc1155LazyMintTransferProxy.addOperator(exchangeV2.address, {
+      from: owner,
+    });
 
     await exchangeV2.__ExchangeV2_init(
       transferProxy.address,
       erc20TransferProxy.address,
       PROTOCOL_FEE,
       feeReceiver,
-      royaltiesRegistry.address
+      royaltiesRegistry.address,
+      { from: owner }
+    );
+
+    await exchangeV2.setTransferProxy(
+      ERC721_LAZY,
+      erc1155LazyMintTransferProxy.address,
+      { from: owner }
+    );
+
+    await erc1155Rarible.setDefaultApproval(
+      erc1155LazyMintTransferProxy.address,
+      true,
+      { from: owner }
     );
   });
 
@@ -151,7 +170,100 @@ contract('ExchangeV2', function (accounts) {
     );
   });
 
+  it('Lazy Minted ERC1155 to ETH', async () => {
+    const tokenId = seller + 'b00000000000000000000001';
+    const uri = '';
+    const totalSupply = 10;
+    const amount = 1;
+
+    const signature = await getLazyMintedSignature(
+      tokenId,
+      uri,
+      totalSupply,
+      [
+        {
+          account: seller,
+          value: 10000,
+        },
+      ],
+      [],
+      seller
+    );
+
+    const left = Order(
+      seller,
+      Asset(
+        ERC721_LAZY,
+        lazyMintedEnc(erc1155Rarible.address, [
+          tokenId,
+          uri,
+          totalSupply,
+          [[seller, 10000]],
+          [],
+          [signature],
+        ]),
+        amount
+      ),
+      ZERO_ADDRESS,
+      Asset(ETH, '0x', ONE_ETHER),
+      1,
+      0,
+      0,
+      '0xffffffff',
+      '0x'
+    );
+    const right = Order(
+      buyer,
+      Asset(ETH, '0x', ONE_ETHER),
+      ZERO_ADDRESS,
+      Asset(
+        ERC721_LAZY,
+        lazyMintedEnc(erc1155Rarible.address, [
+          tokenId,
+          uri,
+          totalSupply,
+          [[seller, 10000]],
+          [],
+          [signature],
+        ]),
+        amount
+      ),
+      1,
+      0,
+      0,
+      '0xffffffff',
+      '0x'
+    );
+
+    await exchangeV2.matchOrders(
+      left,
+      await getSignature(left, seller),
+      right,
+      '0x',
+      { from: buyer, value: '2000000000000000000' }
+    );
+  });
+
   async function getSignature(order, signer) {
     return sign(order, signer, exchangeV2.address);
+  }
+
+  async function getLazyMintedSignature(
+    tokenId,
+    tokenURI,
+    supply,
+    creators,
+    fees,
+    account
+  ) {
+    return lazyMintedSign(
+      account,
+      tokenId,
+      tokenURI,
+      supply,
+      creators,
+      fees,
+      erc1155Rarible.address
+    );
   }
 });
