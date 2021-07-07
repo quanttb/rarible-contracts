@@ -3,5 +3,5 @@ build
 
 *.log
 yarn.lock
-.secret
+env.json
 accounts.json

@@ -55,11 +55,11 @@ contract('ExchangeV2', function (accounts) {
 
     await transferProxy.__TransferProxy_init({ from: owner });
     await erc20TransferProxy.__ERC20TransferProxy_init({ from: owner });
+    await erc1155LazyMintTransferProxy.__OperatorRole_init({ from: owner });
     await royaltiesRegistry.__RoyaltiesRegistry_init({ from: owner });
 
     await transferProxy.addOperator(exchangeV2.address, { from: owner });
     await erc20TransferProxy.addOperator(exchangeV2.address, { from: owner });
-    await erc1155LazyMintTransferProxy.__OperatorRole_init({ from: owner });
     await erc1155LazyMintTransferProxy.addOperator(exchangeV2.address, {
       from: owner,
     });

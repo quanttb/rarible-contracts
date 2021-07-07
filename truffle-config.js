@@ -1,7 +1,11 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 
-const fs = require('fs');
-const privateKeys = [fs.readFileSync('.secret').toString().trim()];
+const {
+  PRIVATE_KEY,
+  BSCSCAN_API_KEY,
+  ETHERSCAN_API_KEY,
+  INFURA_KEY,
+} = require('./env.json');
 
 module.exports = {
   networks: {
@@ -13,8 +17,8 @@ module.exports = {
     bsc_testnet: {
       provider: () =>
         new HDWalletProvider(
-          privateKeys,
-          `https://data-seed-prebsc-1-s1.binance.org:8545`,
+          [PRIVATE_KEY],
+          'https://data-seed-prebsc-1-s1.binance.org:8545',
           0,
           1
         ),
@@ -26,8 +30,8 @@ module.exports = {
     ropsten: {
       provider: () =>
         new HDWalletProvider(
-          privateKeys,
-          `https://ropsten.infura.io/v3/3ddd56890b904b69b8f3a6febe318e7d`,
+          [PRIVATE_KEY],
+          `https://ropsten.infura.io/v3/${INFURA_KEY}`,
           0,
           1
         ),
@@ -53,5 +57,12 @@ module.exports = {
         evmVersion: 'istanbul',
       },
     },
+  },
+
+  plugins: ['truffle-plugin-verify'],
+
+  api_keys: {
+    etherscan: ETHERSCAN_API_KEY,
+    bscscan: BSCSCAN_API_KEY,
   },
 };

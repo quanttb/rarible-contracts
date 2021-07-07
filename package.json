@@ -1,25 +1,29 @@
 {
   "name": "rarible-contracts",
   "version": "0.0.1",
-  "description": "",
-  "scripts": {
-    "compile": "truffle compile",
-    "test": "truffle test",
-    "test:dev": "truffle test --show-events",
-    "start:dev": "ganache-cli --account_keys_path ./accounts.json",
-    "migrate:dev": "truffle migrate",
-    "console:dev": "truffle console",
-    "migrate:bsc-testnet": "truffle migrate --network bsc_testnet",
-    "console:bsc-testnet": "truffle console --network bsc_testnet",
-    "migrate:ropsten": "truffle migrate --network ropsten",
-    "console:ropsten": "truffle console --network ropsten",
-    "migrate:localhost": "truffle migrate --network localhost",
-    "console:localhost": "truffle console --network localhost"
-  },
   "author": "tranthienbaoquan@gmail.com",
   "license": "MIT",
+  "scripts": {
+    "compile": "truffle compile --all",
+    "start:dev": "ganache-cli --account_keys_path ./accounts.json",
+    "test": "truffle test --compile-all",
+    "test:dev": "truffle test --compile-all --show-events",
+    "test:debug": "truffle test --compile-all --debug --show-events",
+    "deploy:dev": "truffle migrate --network ganache -f 2 --to 2",
+    "deploy:bsc-testnet": "truffle migrate --network bsc_testnet -f 2 --to 2",
+    "deploy:ropsten": "truffle migrate --network ropsten -f 2 --to 2",
+    "upgrade:dev": "truffle migrate --network ganache -f 3 --to 3",
+    "upgrade:bsc-testnet": "truffle migrate --network bsc_testnet -f 3 --to 3",
+    "upgrade:ropsten": "truffle migrate --network ropsten -f 3 --to 3",
+    "verify:bsc-testnet": "truffle run verify WETH --network bsc_testnet",
+    "console:dev": "truffle console --network ganache",
+    "console:bsc-testnet": "truffle console --network bsc_testnet",
+    "console:ropsten": "truffle console --network ropsten"
+  },
   "dependencies": {
+    "@openzeppelin/truffle-upgrades": "^1.8.0",
     "@truffle/hdwallet-provider": "^1.4.1",
-    "bignumber.js": "^9.0.1"
+    "bignumber.js": "^9.0.1",
+    "truffle-plugin-verify": "^0.4.6"
   }
 }
