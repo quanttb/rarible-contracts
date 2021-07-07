@@ -1461,11 +1461,11 @@ pragma solidity >=0.6.2 <0.8.0;
 interface IERC1155LazyMint is IERC1155Upgradeable {
 
     event Supply(
-        uint256 tokenId,
+        uint256 indexed tokenId,
         uint256 value
     );
     event Creators(
-        uint256 tokenId,
+        uint256 indexed tokenId,
         LibPart.Part[] creators
     );
 

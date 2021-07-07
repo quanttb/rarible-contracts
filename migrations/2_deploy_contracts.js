@@ -1,4 +1,5 @@
 const { deployProxy } = require('@openzeppelin/truffle-upgrades');
+const fs = require('fs');
 
 const WETH = artifacts.require('WETH');
 const ERC721Rarible = artifacts.require('ERC721Rarible');
@@ -100,4 +101,86 @@ module.exports = async function (deployer, network) {
   );
   console.log(`- RoyaltiesRegistry: ${royaltiesRegistryInst.address}`);
   console.log(`- ExchangeV2: ${exchangeV2Inst.address}`);
+
+  const proxyContractAddress = [
+    erc721RaribleInst.address,
+    erc1155RaribleInst.address,
+    erc20TransferProxyInst.address,
+    transferProxyInst.address,
+    erc721LazyMintTransferProxyInst.address,
+    erc1155LazyMintTransferProxyInst.address,
+    royaltiesRegistryInst.address,
+    exchangeV2Inst.address,
+  ];
+  const implContractAddresses = await Promise.all(
+    proxyContractAddress.map(async (addr) => {
+      const implAddr = await web3.eth.getStorageAt(
+        addr,
+        '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc'
+      );
+
+      return `0x${implAddr.substr(implAddr.length - 40)}`;
+    })
+  );
+  console.log('Implementation Contract Addresses:');
+  console.log(implContractAddresses);
+  fs.writeFileSync('contract-addresses.txt', 'WETH', {
+    flag: 'w+',
+  });
+  fs.writeFileSync(
+    'contract-addresses.txt',
+    `\r\nERC721Rarible@${implContractAddresses[0]}`,
+    {
+      flag: 'a',
+    }
+  );
+  fs.writeFileSync(
+    'contract-addresses.txt',
+    `\r\nERC1155Rarible@${implContractAddresses[1]}`,
+    {
+      flag: 'a',
+    }
+  );
+  fs.writeFileSync(
+    'contract-addresses.txt',
+    `\r\nERC20TransferProxy@${implContractAddresses[2]}`,
+    {
+      flag: 'a',
+    }
+  );
+  fs.writeFileSync(
+    'contract-addresses.txt',
+    `\r\nTransferProxy@${implContractAddresses[3]}`,
+    {
+      flag: 'a',
+    }
+  );
+  fs.writeFileSync(
+    'contract-addresses.txt',
+    `\r\nERC721LazyMintTransferProxy@${implContractAddresses[4]}`,
+    {
+      flag: 'a',
+    }
+  );
+  fs.writeFileSync(
+    'contract-addresses.txt',
+    `\r\nERC1155LazyMintTransferProxy@${implContractAddresses[5]}`,
+    {
+      flag: 'a',
+    }
+  );
+  fs.writeFileSync(
+    'contract-addresses.txt',
+    `\r\nRoyaltiesRegistry@${implContractAddresses[6]}`,
+    {
+      flag: 'a',
+    }
+  );
+  fs.writeFileSync(
+    'contract-addresses.txt',
+    `\r\nExchangeV2@${implContractAddresses[7]}`,
+    {
+      flag: 'a',
+    }
+  );
 };

@@ -2147,7 +2147,7 @@ pragma solidity >=0.6.2 <0.8.0;
 interface IERC721LazyMint is IERC721Upgradeable {
 
     event Creators(
-        uint256 tokenId,
+        uint256 indexed tokenId,
         LibPart.Part[] creators
     );
 
@@ -2442,7 +2442,7 @@ pragma solidity 0.7.6;
 
 contract Mint721Validator is ERC1271Validator {
     function __Mint721Validator_init_unchained() internal initializer {
-        __EIP712_init("Mint721", "1");
+        __EIP712_init_unchained("Mint721", "1");
     }
 
     function validate(address account, bytes32 hash, bytes memory signature) internal view {

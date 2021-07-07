@@ -15,7 +15,7 @@
     "upgrade:dev": "truffle migrate --network ganache -f 3 --to 3",
     "upgrade:bsc-testnet": "truffle migrate --network bsc_testnet -f 3 --to 3",
     "upgrade:ropsten": "truffle migrate --network ropsten -f 3 --to 3",
-    "verify:bsc-testnet": "truffle run verify WETH --network bsc_testnet",
+    "verify:bsc-testnet": "truffle run verify `cat contract-addresses.txt | tr -s \"\r\n\" \" \"` --network bsc_testnet --license MIT",
     "console:dev": "truffle console --network ganache",
     "console:bsc-testnet": "truffle console --network bsc_testnet",
     "console:ropsten": "truffle console --network ropsten"
