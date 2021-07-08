@@ -12,13 +12,18 @@
     "deploy:dev": "truffle migrate --network ganache -f 2 --to 2",
     "deploy:bsc-testnet": "truffle migrate --network bsc_testnet -f 2 --to 2",
     "deploy:ropsten": "truffle migrate --network ropsten -f 2 --to 2",
+    "deploy:rinkeby": "truffle migrate --network rinkeby -f 2 --to 2",
     "upgrade:dev": "truffle migrate --network ganache -f 3 --to 3",
     "upgrade:bsc-testnet": "truffle migrate --network bsc_testnet -f 3 --to 3",
     "upgrade:ropsten": "truffle migrate --network ropsten -f 3 --to 3",
+    "upgrade:rinkeby": "truffle migrate --network rinkeby -f 3 --to 3",
     "verify:bsc-testnet": "truffle run verify `cat contract-addresses.txt | tr -s \"\r\n\" \" \"` --network bsc_testnet --license MIT",
+    "verify:ropsten": "truffle run verify `cat contract-addresses.txt | tr -s \"\r\n\" \" \"` --network ropsten --license MIT",
+    "verify:rinkeby": "truffle run verify `cat contract-addresses.txt | tr -s \"\r\n\" \" \"` --network rinkeby --license MIT",
     "console:dev": "truffle console --network ganache",
     "console:bsc-testnet": "truffle console --network bsc_testnet",
-    "console:ropsten": "truffle console --network ropsten"
+    "console:ropsten": "truffle console --network ropsten",
+    "console:rinkeby": "truffle console --network rinkeby"
   },
   "dependencies": {
     "@openzeppelin/truffle-upgrades": "^1.8.0",

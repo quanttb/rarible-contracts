@@ -40,6 +40,19 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true,
     },
+    rinkeby: {
+      provider: () =>
+        new HDWalletProvider(
+          [PRIVATE_KEY],
+          `https://rinkeby.infura.io/v3/${INFURA_KEY}`,
+          0,
+          1
+        ),
+      network_id: 4,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+    },
   },
 
   mocha: {

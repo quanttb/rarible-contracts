@@ -5,3 +5,4 @@ build
 yarn.lock
 env.json
 accounts.json
+contract-addresses.txt
